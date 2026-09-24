@@ -1,0 +1,9 @@
+streamlit
+google-genai
+python-docx
+PyPDF2
+python-pptx
+deep-translator
+langdetect
+streamlit-extras
+streamlit-js-eval
