@@ -75,24 +75,23 @@ def run_app():
                 )
 
     with output_pane:
-        with st.container(border=True):
-            st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
+        st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
 
-            if not generated_files:
-                st.markdown(
-                    '<div class="output-empty">Formatted CVs will appear here.</div>',
-                    unsafe_allow_html=True,
-                )
-            else:
-                for item in generated_files:
-                    name_col, dl_col = st.columns([3.7, 1.0], vertical_alignment="center")
-                    with name_col:
-                        st.markdown(f"**{item['output_name']}**")
-                    with dl_col:
-                        with open(item["output_path"], "rb") as f:
-                            st.download_button(
-                                "Download",
-                                data=f,
-                                file_name=item["output_name"],
-                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                            )
+        if not generated_files:
+            st.markdown(
+                '<div class="output-empty">Formatted CVs will appear here.</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            for item in generated_files:
+                name_col, dl_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                with name_col:
+                    st.markdown(f"**{item['output_name']}**")
+                with dl_col:
+                    with open(item["output_path"], "rb") as f:
+                        st.download_button(
+                            "Download",
+                            data=f,
+                            file_name=item["output_name"],
+                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        )

@@ -27,19 +27,19 @@ TOOLS = {
     "cvs_refs": {
         "nav": "CVs + References",
         "title": "Adapt CVs & references",
-        "hint": "Tender title · reference · consultant CVs",
+        "subtitle": "Tailor project references and consultant CVs to a tender.",
         "runner": run_cvs_refs_adapter,
     },
     "reference": {
         "nav": "Reference Creator",
         "title": "Create a project reference",
-        "hint": "Report in · French and English references out",
+        "subtitle": "Turn a source report into French and English reference sheets.",
         "runner": run_ref_creator,
     },
     "cv_template": {
         "nav": "CV Template",
         "title": "Format CVs in a template",
-        "hint": "Source CVs · target Word template",
+        "subtitle": "Map source CVs into your target Word template.",
         "runner": run_cvs_adapter,
     },
 }
@@ -61,52 +61,46 @@ def go_to(route: str) -> None:
     st.rerun()
 
 
-def render_chrome() -> None:
-    brand, nav1, nav2, nav3, status = st.columns(
-        [2.1, 1.55, 1.55, 1.35, 2.0],
+def render_topbar() -> None:
+    brand, spacer, nav1, nav2, nav3, status = st.columns(
+        [1.35, 1.15, 1.25, 1.35, 1.05, 0.95],
         vertical_alignment="center",
         gap="small",
     )
 
     with brand:
-        logo_col, text_col = st.columns([0.28, 1.72], vertical_alignment="center", gap="small")
+        logo_col, name_col = st.columns([0.22, 1.78], vertical_alignment="center", gap="small")
         with logo_col:
-            st.image(str(ROOT / "logo.png"), width=28)
-        with text_col:
-            st.markdown('<div class="brand-name">BD Tools</div>', unsafe_allow_html=True)
+            st.image(str(ROOT / "logo.png"), width=25)
+        with name_col:
+            st.markdown('<div class="brand-lockup"><strong>BD</strong> Tools</div>', unsafe_allow_html=True)
 
     route = st.session_state.bd_route
     for key, col in zip(["cvs_refs", "reference", "cv_template"], [nav1, nav2, nav3]):
         with col:
-            if st.button(
-                TOOLS[key]["nav"],
-                key=f"nav_{key}",
-                type="primary" if route == key else "secondary",
-                use_container_width=False,
-            ):
+            active = route == key
+            label = f"{TOOLS[key]['nav']}" + ("  •" if active else "")
+            if st.button(label, key=f"nav_{key}", type="secondary"):
                 go_to(key)
 
     with status:
-        if gemini_is_configured():
-            st.markdown('<div class="status-ok">● Gemini connected</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div class="status-missing">● Gemini key missing</div>', unsafe_allow_html=True)
+        state = "connected" if gemini_is_configured() else "missing"
+        label = "Gemini" if gemini_is_configured() else "Add Gemini key"
+        st.markdown(
+            f'<div class="api-state {state}"><span></span>{label}</div>',
+            unsafe_allow_html=True,
+        )
 
-    st.markdown('<div class="chrome-rule"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="top-rule"></div>', unsafe_allow_html=True)
 
 
 def render_tool(route: str) -> None:
     tool = TOOLS[route]
-
-    title_col, hint_col = st.columns([3.1, 5.9], vertical_alignment="bottom")
-    with title_col:
-        st.markdown(f'<div class="tool-title">{tool["title"]}</div>', unsafe_allow_html=True)
-    with hint_col:
-        st.markdown(f'<div class="tool-hint">{tool["hint"]}</div>', unsafe_allow_html=True)
-
-    st.markdown('<div class="title-rule"></div>', unsafe_allow_html=True)
+    st.markdown(f'<h1 class="page-title">{tool["title"]}</h1>', unsafe_allow_html=True)
+    st.markdown(f'<div class="page-subtitle">{tool["subtitle"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-rule"></div>', unsafe_allow_html=True)
     tool["runner"]()
 
 
-render_chrome()
+render_topbar()
 render_tool(st.session_state.bd_route)

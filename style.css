@@ -1,21 +1,20 @@
 :root {
-    --ink: #172126;
-    --muted: #768087;
-    --line: #dfe3e4;
-    --line-strong: #c9cfd1;
+    --ink: #151719;
+    --text: #303438;
+    --muted: #7a8085;
+    --soft: #a8adb1;
+    --line: #e7e9ea;
+    --line-strong: #d6dadd;
     --paper: #ffffff;
-    --canvas: #f3f2ee;
-    --panel: #f8f8f6;
-    --accent: #0f6f78;
-    --accent-dark: #0b5961;
+    --accent: #11818a;
 }
 
 html, body, [class*="css"] {
-    font-family: "Segoe UI", Arial, sans-serif !important;
+    font-family: Inter, "Segoe UI", Arial, sans-serif !important;
 }
 
 html, body, .stApp {
-    background: var(--canvas) !important;
+    background: #ffffff !important;
     color: var(--ink) !important;
 }
 
@@ -33,68 +32,129 @@ header[data-testid="stHeader"] {
 }
 
 .main .block-container {
-    width: min(96vw, 1480px) !important;
-    max-width: none !important;
-    padding: 1.05rem 1.25rem 1.2rem !important;
+    width: min(92vw, 1320px) !important;
+    max-width: 1320px !important;
+    padding: 1.15rem 0 2rem !important;
 }
 
-/* --- Application chrome --- */
-.brand-name {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.02rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+/* Top bar */
+.brand-lockup {
     color: var(--ink);
+    font-size: 0.91rem;
+    letter-spacing: -0.015em;
     white-space: nowrap;
 }
 
-.status-ok,
-.status-missing {
-    text-align: right;
-    font-size: 0.70rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-}
-.status-ok { color: #43766e; }
-.status-missing { color: #9b5a4e; }
-
-.chrome-rule {
-    height: 1px;
-    background: var(--line-strong);
-    margin: 0.65rem 0 0.95rem;
+.brand-lockup strong {
+    font-weight: 780;
 }
 
-.tool-title {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.55rem;
-    line-height: 1.06;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    color: var(--ink);
-}
-
-.tool-hint {
-    text-align: right;
-    font-size: 0.72rem;
-    line-height: 1.2;
+.api-state {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.4rem;
     color: var(--muted);
-    padding-bottom: 0.12rem;
+    font-size: 0.67rem;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
-.title-rule {
+.api-state span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    background: #b5b9bc;
+}
+
+.api-state.connected span { background: #4b9a75; }
+.api-state.missing span { background: #c47f68; }
+
+.top-rule {
     height: 1px;
     background: var(--line);
-    margin: 0.6rem 0 0.9rem;
+    margin: 0.72rem 0 1.65rem;
 }
 
-/* --- Dense UI rhythm --- */
+/* Navigation is text-like, not a pill/tab bar */
+.stButton > button {
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 30px !important;
+    height: 30px !important;
+    padding: 0 0.2rem !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #6f767b !important;
+    font-size: 0.70rem !important;
+    font-weight: 650 !important;
+    white-space: nowrap !important;
+}
+
+.stButton > button:hover {
+    color: var(--ink) !important;
+    background: transparent !important;
+}
+
+div[data-testid="stButton"] button[kind="primary"] {
+    min-height: 32px !important;
+    height: 32px !important;
+    padding: 0 0.72rem !important;
+    border-radius: 4px !important;
+    background: var(--ink) !important;
+    color: #ffffff !important;
+    font-weight: 720 !important;
+}
+
+div[data-testid="stButton"] button[kind="primary"]:hover {
+    background: #2b2e31 !important;
+    color: #ffffff !important;
+}
+
+/* Page heading */
+
+.page-title {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--ink) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: 1.72rem !important;
+    line-height: 1.08 !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.028em !important;
+}
+
+.page-subtitle {
+    color: var(--muted);
+    font-size: 0.73rem;
+    line-height: 1.4;
+    margin-top: 0.34rem;
+}
+
+.page-rule {
+    height: 1px;
+    background: var(--line);
+    margin: 0.95rem 0 1.05rem;
+}
+
+/* Layout rhythm */
 [data-testid="stVerticalBlock"] {
     gap: 0.48rem !important;
 }
 
 [data-testid="stHorizontalBlock"] {
-    gap: 0.9rem !important;
+    gap: 2.2rem !important;
+}
+
+/* Native markdown headings used inside panes */
+[data-testid="stMarkdownContainer"] p strong:only-child {
+    color: var(--ink) !important;
+    font-size: 0.70rem !important;
+    font-weight: 760 !important;
+    letter-spacing: 0.01em;
 }
 
 [data-testid="stWidgetLabel"] {
@@ -103,45 +163,46 @@ header[data-testid="stHeader"] {
 
 [data-testid="stWidgetLabel"] p,
 label p {
-    color: #48545a !important;
-    font-size: 0.70rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.015em !important;
+    color: #545a5f !important;
+    font-size: 0.69rem !important;
+    font-weight: 680 !important;
+    letter-spacing: 0 !important;
 }
 
 [data-testid="stCaptionContainer"] {
     color: var(--muted) !important;
-    font-size: 0.69rem !important;
+    font-size: 0.66rem !important;
 }
 
-/* Text fields */
+/* Inputs */
 [data-testid="stTextInput"] input {
-    height: 36px !important;
-    min-height: 36px !important;
+    height: 35px !important;
+    min-height: 35px !important;
     border: 1px solid var(--line-strong) !important;
-    border-radius: 2px !important;
-    background: var(--paper) !important;
+    border-radius: 5px !important;
+    background: #fff !important;
     box-shadow: none !important;
-    font-size: 0.79rem !important;
-    padding: 0.32rem 0.52rem !important;
+    color: var(--ink) !important;
+    font-size: 0.77rem !important;
+    padding: 0.34rem 0.55rem !important;
 }
 
 [data-testid="stTextInput"] input:focus {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 0 1px var(--accent) !important;
+    border-color: #969da2 !important;
+    box-shadow: 0 0 0 1px #969da2 !important;
 }
 
-/* Uploaders */
+/* File uploaders: restrained and light */
 [data-testid="stFileUploader"] {
     background: transparent !important;
 }
 
 [data-testid="stFileUploaderDropzone"] {
-    min-height: 76px !important;
-    padding: 0.5rem 0.7rem !important;
-    background: var(--paper) !important;
-    border: 1px dashed #b9c0c3 !important;
-    border-radius: 2px !important;
+    min-height: 68px !important;
+    padding: 0.45rem 0.65rem !important;
+    background: #fff !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 5px !important;
 }
 
 [data-testid="stFileUploaderDropzone"] section {
@@ -150,103 +211,92 @@ label p {
 
 [data-testid="stFileUploaderDropzone"] p,
 [data-testid="stFileUploaderDropzone"] small {
-    font-size: 0.68rem !important;
+    color: #72787d !important;
+    font-size: 0.65rem !important;
     line-height: 1.2 !important;
 }
 
-/* Buttons: compact, text-sized, square-ish */
-.stButton,
-.stDownloadButton {
-    width: auto !important;
-}
-
-.stButton > button,
+/* Download buttons */
 .stDownloadButton > button {
     width: auto !important;
     min-width: 0 !important;
-    min-height: 33px !important;
-    padding: 0.30rem 0.68rem !important;
-    border-radius: 2px !important;
+    min-height: 29px !important;
+    height: 29px !important;
+    padding: 0 0.58rem !important;
     border: 1px solid var(--line-strong) !important;
-    background: var(--paper) !important;
-    color: var(--ink) !important;
-    font-size: 0.71rem !important;
+    border-radius: 4px !important;
+    background: #fff !important;
+    color: #373c40 !important;
+    font-size: 0.66rem !important;
     font-weight: 700 !important;
     box-shadow: none !important;
-    white-space: nowrap !important;
 }
 
-.stButton > button:hover,
 .stDownloadButton > button:hover {
-    border-color: #99a4a8 !important;
-    background: #fbfbfa !important;
+    border-color: #aeb4b8 !important;
+    background: #fff !important;
 }
 
-div[data-testid="stButton"] button[kind="primary"] {
-    background: var(--ink) !important;
-    border-color: var(--ink) !important;
-    color: #fff !important;
-}
-
-div[data-testid="stButton"] button[kind="primary"]:hover {
-    background: #27343a !important;
-    border-color: #27343a !important;
-}
-
-/* One purposeful output surface, not cards everywhere */
+/* Remove the previous output card entirely */
 [data-testid="stVerticalBlockBorderWrapper"] {
-    border: 1px solid var(--line) !important;
-    border-radius: 2px !important;
-    background: var(--panel) !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
     box-shadow: none !important;
 }
 
 [data-testid="stVerticalBlockBorderWrapper"] > div {
-    padding: 0.85rem 0.95rem !important;
+    padding: 0 !important;
 }
 
 .output-heading {
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    color: #6a7479;
-    text-transform: uppercase;
-    margin-bottom: 0.45rem;
+    color: var(--ink);
+    font-size: 0.70rem;
+    font-weight: 760;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    margin: 0 0 0.48rem;
+    padding-bottom: 0.42rem;
+    border-bottom: 1px solid var(--line);
 }
 
 .output-empty {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.05rem;
-    color: #9aa1a4;
-    line-height: 1.35;
-    margin-top: 0.55rem;
+    color: #9aa0a4;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    padding: 0.25rem 0 0;
 }
 
+/* File result rows */
 .file-row {
-    padding: 0.28rem 0;
+    padding: 0.35rem 0;
     border-bottom: 1px solid var(--line);
 }
 
 [data-testid="stAlert"] {
-    border-radius: 2px !important;
-    font-size: 0.73rem !important;
-    padding: 0.48rem 0.62rem !important;
+    border: 0 !important;
+    border-left: 2px solid #d6dadd !important;
+    border-radius: 0 !important;
+    background: #fafafa !important;
+    font-size: 0.70rem !important;
+    padding: 0.45rem 0.6rem !important;
 }
 
-/* Keep spinners and alerts compact */
 [data-testid="stSpinner"] {
-    font-size: 0.74rem !important;
+    font-size: 0.70rem !important;
 }
 
 @media (max-width: 900px) {
     .main .block-container {
         width: 100% !important;
-        padding: 0.75rem 0.75rem 1.1rem !important;
+        padding: 0.8rem 0.8rem 1.4rem !important;
     }
 
-    .tool-hint,
-    .status-ok,
-    .status-missing {
-        text-align: left;
+    [data-testid="stHorizontalBlock"] {
+        gap: 0.85rem !important;
+    }
+
+    .api-state {
+        justify-content: flex-start;
     }
 }

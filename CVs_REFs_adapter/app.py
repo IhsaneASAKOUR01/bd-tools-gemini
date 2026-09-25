@@ -155,29 +155,28 @@ def run_app():
                     )
 
     with output_pane:
-        with st.container(border=True):
-            st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
+        st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
 
-            downloads = []
-            if st.session_state["ref_result"]:
-                downloads.append(("Reference", st.session_state["ref_result"]))
-            downloads.extend(("CV", result) for result in st.session_state["resume_results"])
+        downloads = []
+        if st.session_state["ref_result"]:
+            downloads.append(("Reference", st.session_state["ref_result"]))
+        downloads.extend(("CV", result) for result in st.session_state["resume_results"])
 
-            if not downloads:
-                st.markdown(
-                    '<div class="output-empty">Generated Word files will appear here.</div>',
-                    unsafe_allow_html=True,
-                )
-            else:
-                for kind, result in downloads:
-                    name_col, download_col = st.columns([3.7, 1.0], vertical_alignment="center")
-                    with name_col:
-                        st.markdown(f"**{result['original']}**")
-                        st.caption(kind)
-                    with download_col:
-                        st.download_button(
-                            "Download",
-                            data=result["data"],
-                            file_name=result["name"],
-                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                        )
+        if not downloads:
+            st.markdown(
+                '<div class="output-empty">Generated Word files will appear here.</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            for kind, result in downloads:
+                name_col, download_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                with name_col:
+                    st.markdown(f"**{result['original']}**")
+                    st.caption(kind)
+                with download_col:
+                    st.download_button(
+                        "Download",
+                        data=result["data"],
+                        file_name=result["name"],
+                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    )

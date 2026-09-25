@@ -95,31 +95,30 @@ def run_app():
         st.session_state["generated"] = True
 
     with output_pane:
-        with st.container(border=True):
-            st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
+        st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
 
-            paths = []
-            if st.session_state["output_path_fr"]:
-                paths.append(("French", st.session_state["output_path_fr"]))
-            if st.session_state["output_path_en"]:
-                paths.append(("English", st.session_state["output_path_en"]))
+        paths = []
+        if st.session_state["output_path_fr"]:
+            paths.append(("French", st.session_state["output_path_fr"]))
+        if st.session_state["output_path_en"]:
+            paths.append(("English", st.session_state["output_path_en"]))
 
-            if not paths:
-                st.markdown(
-                    '<div class="output-empty">The French and English reference files will appear here.</div>',
-                    unsafe_allow_html=True,
-                )
-            else:
-                for language, path in paths:
-                    name_col, dl_col = st.columns([3.7, 1.0], vertical_alignment="center")
-                    with name_col:
-                        st.markdown(f"**{language} reference**")
-                        st.caption(path.name)
-                    with dl_col:
-                        with open(path, "rb") as f:
-                            st.download_button(
-                                "Download",
-                                data=f,
-                                file_name=path.name,
-                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                            )
+        if not paths:
+            st.markdown(
+                '<div class="output-empty">The French and English reference files will appear here.</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            for language, path in paths:
+                name_col, dl_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                with name_col:
+                    st.markdown(f"**{language} reference**")
+                    st.caption(path.name)
+                with dl_col:
+                    with open(path, "rb") as f:
+                        st.download_button(
+                            "Download",
+                            data=f,
+                            file_name=path.name,
+                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        )
