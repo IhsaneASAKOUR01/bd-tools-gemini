@@ -17,16 +17,13 @@ def run_app():
     if "output_path_en" not in st.session_state:
         st.session_state["output_path_en"] = None
 
-    st.subheader("Source report")
-    uploaded_report = st.file_uploader(
-        "Project report",
-        type=["docx", "pdf", "pptx", "txt"],
-        key="ref_creator_report",
-        label_visibility="collapsed",
-    )
-
-    st.divider()
-    _, action_col = st.columns([4.2, 1.25])
+    upload_col, action_col = st.columns([4.8, 1.2], vertical_alignment="bottom")
+    with upload_col:
+        uploaded_report = st.file_uploader(
+            "Source report",
+            type=["docx", "pdf", "pptx", "txt"],
+            key="ref_creator_report",
+        )
     with action_col:
         submit = st.button(
             "Create reference",
@@ -98,14 +95,12 @@ def run_app():
         st.session_state["generated"] = True
 
     if st.session_state["output_path_fr"] or st.session_state["output_path_en"]:
-        st.write("")
-        st.subheader("Ready")
+        st.caption("Generated files")
 
         if st.session_state["output_path_fr"]:
-            name_col, dl_col = st.columns([4.2, 1.25], vertical_alignment="center")
+            name_col, dl_col = st.columns([4.8, 1.2], vertical_alignment="center")
             with name_col:
-                st.write("**French reference**")
-                st.caption(st.session_state["output_path_fr"].name)
+                st.markdown(f"**French reference** · {st.session_state['output_path_fr'].name}")
             with dl_col:
                 with open(st.session_state["output_path_fr"], "rb") as f:
                     st.download_button(
@@ -115,13 +110,11 @@ def run_app():
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         use_container_width=True,
                     )
-            st.divider()
 
         if st.session_state["output_path_en"]:
-            name_col, dl_col = st.columns([4.2, 1.25], vertical_alignment="center")
+            name_col, dl_col = st.columns([4.8, 1.2], vertical_alignment="center")
             with name_col:
-                st.write("**English reference**")
-                st.caption(st.session_state["output_path_en"].name)
+                st.markdown(f"**English reference** · {st.session_state['output_path_en'].name}")
             with dl_col:
                 with open(st.session_state["output_path_en"], "rb") as f:
                     st.download_button(
@@ -131,4 +124,3 @@ def run_app():
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         use_container_width=True,
                     )
-            st.divider()

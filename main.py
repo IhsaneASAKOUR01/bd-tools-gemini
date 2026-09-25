@@ -101,14 +101,50 @@ def render_home() -> None:
 def render_tool(route: str) -> None:
     tool = TOOLS[route]
 
-    number, heading = st.columns([0.55, 6.5], vertical_alignment="bottom")
+    # Tool pages are intentionally compact; the home page keeps the editorial layout.
+    st.markdown(
+        """
+        <style>
+        .main .block-container {
+            max-width: 940px !important;
+            padding-top: 0.45rem !important;
+            padding-bottom: 1.2rem !important;
+        }
+        .main .block-container > div[data-testid="stVerticalBlock"] {
+            gap: 0.42rem !important;
+        }
+        [data-testid="stFileUploaderDropzone"] {
+            min-height: 78px !important;
+            padding: 0.55rem 0.7rem !important;
+        }
+        [data-testid="stFileUploaderDropzone"] section {
+            padding: 0 !important;
+        }
+        [data-testid="stFileUploaderDropzone"] p,
+        [data-testid="stFileUploaderDropzone"] small {
+            font-size: 0.69rem !important;
+            line-height: 1.25 !important;
+        }
+        [data-testid="stWidgetLabel"] {
+            margin-bottom: 0.15rem !important;
+        }
+        [data-testid="stWidgetLabel"] p {
+            font-size: 0.74rem !important;
+        }
+        .stButton > button, .stDownloadButton > button {
+            min-height: 38px !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    number, heading = st.columns([0.45, 6.8], vertical_alignment="center")
     with number:
         st.caption(tool["number"])
     with heading:
-        st.title(tool["title"])
-        st.caption(tool["meta"])
+        st.markdown(f"### {tool['title']}")
 
-    st.write("")
     tool["runner"]()
 
 

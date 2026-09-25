@@ -10,8 +10,7 @@ from .section_mapper import gpt_fill_as_dict
 
 
 def run_app():
-    st.subheader("Files")
-    cv_col, template_col = st.columns(2, gap="large")
+    cv_col, template_col, action_col = st.columns([2.35, 2.35, 1.3], gap="medium", vertical_alignment="bottom")
 
     with cv_col:
         uploaded_resumes = st.file_uploader(
@@ -28,8 +27,6 @@ def run_app():
             key="template_adapter_template",
         )
 
-    st.divider()
-    _, action_col = st.columns([4.2, 1.25])
     with action_col:
         submit = st.button(
             "Format CVs",
@@ -76,12 +73,11 @@ def run_app():
                 )
 
     if generated_files:
-        st.write("")
-        st.subheader("Ready")
+        st.caption("Generated files")
         for item in generated_files:
-            name_col, dl_col = st.columns([4.2, 1.25], vertical_alignment="center")
+            name_col, dl_col = st.columns([4.8, 1.2], vertical_alignment="center")
             with name_col:
-                st.write(f"**{item['output_name']}**")
+                st.markdown(f"**{item['output_name']}**")
             with dl_col:
                 with open(item["output_path"], "rb") as f:
                     st.download_button(
@@ -91,4 +87,3 @@ def run_app():
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         use_container_width=True,
                     )
-            st.divider()

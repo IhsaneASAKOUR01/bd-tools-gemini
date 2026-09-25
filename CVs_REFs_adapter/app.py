@@ -33,16 +33,21 @@ if "resume_results" not in st.session_state:
 
 
 def run_app():
-    st.subheader("Tender / AO")
-    ao_title = st.text_input(
-        "Title",
-        placeholder="Paste the tender or AO title",
-        label_visibility="collapsed",
-    )
+    title_col, action_col = st.columns([4.8, 1.2], vertical_alignment="bottom")
+    with title_col:
+        ao_title = st.text_input(
+            "Tender / AO title",
+            placeholder="Paste the tender or AO title",
+        )
+    with action_col:
+        run_now = st.button(
+            "Generate",
+            key="submit_refs_cvs_btn",
+            type="primary",
+            use_container_width=True,
+        )
 
-    st.write("")
-    st.subheader("Documents")
-    ref_col, cv_col = st.columns(2, gap="large")
+    ref_col, cv_col = st.columns(2, gap="medium")
     with ref_col:
         uploaded_ref = st.file_uploader(
             "Project reference",
@@ -55,16 +60,6 @@ def run_app():
             type=["docx"],
             accept_multiple_files=True,
             key="adapter_resumes",
-        )
-
-    st.divider()
-    _, action_col = st.columns([4.2, 1.25])
-    with action_col:
-        run_now = st.button(
-            "Generate",
-            key="submit_refs_cvs_btn",
-            type="primary",
-            use_container_width=True,
         )
 
     if not uploaded_ref:
@@ -158,18 +153,16 @@ def run_app():
                     )
 
     if st.session_state["ref_result"] or st.session_state["resume_results"]:
-        st.write("")
-        st.subheader("Ready")
+        st.caption("Generated files")
         downloads = []
         if st.session_state["ref_result"]:
             downloads.append(("Reference", st.session_state["ref_result"]))
         downloads.extend(("CV", result) for result in st.session_state["resume_results"])
 
         for kind, result in downloads:
-            name_col, download_col = st.columns([4.2, 1.25], vertical_alignment="center")
+            name_col, download_col = st.columns([4.8, 1.2], vertical_alignment="center")
             with name_col:
-                st.write(f"**{result['original']}**")
-                st.caption(kind)
+                st.markdown(f"**{result['original']}** · {kind}")
             with download_col:
                 st.download_button(
                     "Download",
@@ -178,4 +171,3 @@ def run_app():
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                     use_container_width=True,
                 )
-            st.divider()
