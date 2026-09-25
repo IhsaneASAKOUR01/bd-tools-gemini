@@ -1,10 +1,9 @@
 :root {
     --ink: #10232f;
-    --muted: #687780;
-    --line: #e3e8eb;
+    --muted: #697780;
+    --line: #e2e7ea;
     --soft: #f7f9fa;
     --accent: #0d89a5;
-    --accent-dark: #0c6176;
     --white: #ffffff;
 }
 
@@ -25,22 +24,22 @@ section[data-testid="stSidebar"] {
 }
 
 header[data-testid="stHeader"] {
-    background: rgba(255,255,255,0.96) !important;
+    background: rgba(255,255,255,0.97) !important;
 }
 
 .main .block-container {
-    max-width: 1080px !important;
-    padding: 1.1rem 1.8rem 4rem !important;
+    max-width: 1040px !important;
+    padding: 0.8rem 1.35rem 2.2rem !important;
 }
 
-/* Typography */
+/* Compact typography */
 h1 {
     color: var(--ink) !important;
-    font-size: 2rem !important;
-    line-height: 1.12 !important;
+    font-size: 1.85rem !important;
+    line-height: 1.1 !important;
     letter-spacing: -0.035em !important;
     font-weight: 650 !important;
-    margin: 0.15rem 0 0.3rem !important;
+    margin: 0.1rem 0 0.25rem !important;
 }
 
 h2, h3 {
@@ -49,94 +48,118 @@ h2, h3 {
 }
 
 h3 {
-    font-size: 1.08rem !important;
-    font-weight: 620 !important;
-    margin: 0.15rem 0 0.18rem !important;
+    font-size: 1.05rem !important;
+    font-weight: 650 !important;
+    margin: 0.05rem 0 !important;
 }
 
 [data-testid="stMarkdownContainer"] p {
-    font-size: 0.88rem;
-    line-height: 1.55;
+    font-size: 0.84rem;
+    line-height: 1.45;
 }
 
 [data-testid="stCaptionContainer"] {
     color: var(--muted) !important;
-    font-size: 0.76rem !important;
-    line-height: 1.45 !important;
+    font-size: 0.73rem !important;
+    line-height: 1.35 !important;
 }
 
-/* Hairline separators instead of cards */
 hr {
     border: 0 !important;
     border-top: 1px solid var(--line) !important;
-    margin: 0.85rem 0 1rem !important;
+    margin: 0.65rem 0 0.75rem !important;
 }
 
-/* Inputs */
+.workbench-rule {
+    height: 1px;
+    background: var(--line);
+    margin: 0.28rem 0 0.8rem;
+}
+
+/* Labels */
+[data-testid="stWidgetLabel"] {
+    margin-bottom: 0.08rem !important;
+}
+
 [data-testid="stWidgetLabel"] p,
 label p {
-    color: #31444f !important;
-    font-size: 0.77rem !important;
+    color: #30424d !important;
+    font-size: 0.72rem !important;
     font-weight: 650 !important;
 }
 
+/* Text input: compact rather than stretched-looking */
 [data-testid="stTextInput"] input {
-    min-height: 44px !important;
-    border: 1px solid #ccd6dc !important;
-    border-radius: 6px !important;
+    min-height: 38px !important;
+    border: 1px solid #ccd5da !important;
+    border-radius: 5px !important;
     background: #fff !important;
     box-shadow: none !important;
-    font-size: 0.84rem !important;
+    font-size: 0.81rem !important;
+    padding: 0.35rem 0.58rem !important;
 }
 
 [data-testid="stTextInput"] input:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 2px rgba(13,137,165,0.09) !important;
+    box-shadow: 0 0 0 2px rgba(13,137,165,0.08) !important;
 }
 
-/* Uploads: one clean surface, no card-on-card feeling */
+/* Compact upload controls */
 [data-testid="stFileUploader"] {
     border: 0 !important;
     background: transparent !important;
 }
 
 [data-testid="stFileUploaderDropzone"] {
-    min-height: 116px !important;
-    padding: 1rem 1.05rem !important;
-    background: var(--soft) !important;
-    border: 1px dashed #c4d0d6 !important;
-    border-radius: 7px !important;
+    min-height: 72px !important;
+    padding: 0.48rem 0.62rem !important;
+    background: #fafbfb !important;
+    border: 1px dashed #c9d2d7 !important;
+    border-radius: 5px !important;
+}
+
+[data-testid="stFileUploaderDropzone"] section {
+    padding: 0 !important;
 }
 
 [data-testid="stFileUploaderDropzone"] p,
 [data-testid="stFileUploaderDropzone"] small {
-    font-size: 0.74rem !important;
+    font-size: 0.68rem !important;
+    line-height: 1.18 !important;
 }
 
-/* Buttons */
+/* Never force app actions to fill their column. */
+.stButton,
+.stDownloadButton {
+    width: auto !important;
+}
+
 .stButton > button,
 .stDownloadButton > button {
-    min-height: 40px !important;
-    border-radius: 6px !important;
-    border: 1px solid #ccd7dc !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 35px !important;
+    padding: 0.34rem 0.72rem !important;
+    border-radius: 5px !important;
+    border: 1px solid #cbd5da !important;
     background: #fff !important;
     color: var(--ink) !important;
-    font-size: 0.78rem !important;
+    font-size: 0.74rem !important;
     font-weight: 650 !important;
     box-shadow: none !important;
-    transition: 0.15s ease !important;
+    white-space: nowrap !important;
 }
 
 .stButton > button:hover,
 .stDownloadButton > button:hover {
-    border-color: #94aab5 !important;
+    border-color: #98aab3 !important;
     background: #fafcfc !important;
 }
 
 div[data-testid="stButton"] button[kind="primary"] {
     background: var(--ink) !important;
     border-color: var(--ink) !important;
-    color: white !important;
+    color: #fff !important;
 }
 
 div[data-testid="stButton"] button[kind="primary"]:hover {
@@ -144,11 +167,15 @@ div[data-testid="stButton"] button[kind="primary"]:hover {
     border-color: #173746 !important;
 }
 
-/* Status + disclosure */
+/* Keep vertical rhythm tight inside the workbench. */
+[data-testid="stVerticalBlock"] {
+    gap: 0.48rem !important;
+}
+
 [data-testid="stAlert"] {
-    border-radius: 6px !important;
-    font-size: 0.78rem !important;
-    padding: 0.62rem 0.8rem !important;
+    border-radius: 5px !important;
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.68rem !important;
 }
 
 [data-testid="stExpander"] {
@@ -158,7 +185,6 @@ div[data-testid="stButton"] button[kind="primary"]:hover {
     background: #fff !important;
 }
 
-/* Hide bordered-container styling if a stale component uses it */
 [data-testid="stVerticalBlockBorderWrapper"] {
     border: 0 !important;
     border-radius: 0 !important;
@@ -166,12 +192,12 @@ div[data-testid="stButton"] button[kind="primary"]:hover {
     background: transparent !important;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 850px) {
     .main .block-container {
-        padding: 0.9rem 1rem 2.5rem !important;
+        padding: 0.7rem 0.85rem 1.8rem !important;
     }
 
     h1 {
-        font-size: 1.65rem !important;
+        font-size: 1.55rem !important;
     }
 }

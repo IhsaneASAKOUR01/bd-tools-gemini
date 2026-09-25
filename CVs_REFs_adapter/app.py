@@ -33,7 +33,7 @@ if "resume_results" not in st.session_state:
 
 
 def run_app():
-    title_col, action_col = st.columns([4.8, 1.2], vertical_alignment="bottom")
+    title_col, action_col = st.columns([5.3, 1.3], vertical_alignment="bottom")
     with title_col:
         ao_title = st.text_input(
             "Tender / AO title",
@@ -44,7 +44,6 @@ def run_app():
             "Generate",
             key="submit_refs_cvs_btn",
             type="primary",
-            use_container_width=True,
         )
 
     ref_col, cv_col = st.columns(2, gap="medium")
@@ -160,7 +159,7 @@ def run_app():
         downloads.extend(("CV", result) for result in st.session_state["resume_results"])
 
         for kind, result in downloads:
-            name_col, download_col = st.columns([4.8, 1.2], vertical_alignment="center")
+            name_col, download_col = st.columns([5.3, 1.3], vertical_alignment="center")
             with name_col:
                 st.markdown(f"**{result['original']}** · {kind}")
             with download_col:
@@ -169,5 +168,4 @@ def run_app():
                     data=result["data"],
                     file_name=result["name"],
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    use_container_width=True,
                 )

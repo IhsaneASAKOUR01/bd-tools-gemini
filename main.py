@@ -62,17 +62,16 @@ def go_to(route: str) -> None:
 
 
 def render_topbar() -> None:
-    brand, spacer, action = st.columns([2.4, 5.4, 1.2], vertical_alignment="center")
+    brand, filler, state = st.columns([2.4, 6.2, 1.4], vertical_alignment="center")
     with brand:
-        logo, name = st.columns([0.34, 1.8], vertical_alignment="center")
+        logo, name = st.columns([0.32, 1.7], vertical_alignment="center")
         with logo:
-            st.image(str(ROOT / "logo.png"), width=34)
+            st.image(str(ROOT / "logo.png"), width=30)
         with name:
             st.markdown("**BD Tools**")
-    with action:
-        if st.session_state.bd_route != "home":
-            if st.button("All tools", key="top_home", use_container_width=True):
-                go_to("home")
+    with state:
+        if st.session_state.bd_route == "home" and gemini_is_configured():
+            st.caption("Gemini ready")
     st.divider()
 
 
@@ -83,14 +82,14 @@ def render_home() -> None:
     st.write("")
 
     for route, tool in TOOLS.items():
-        number, content, open_col = st.columns([0.6, 5.5, 1.25], vertical_alignment="center")
+        number, content, open_col = st.columns([0.55, 6.2, 1.15], vertical_alignment="center")
         with number:
             st.caption(tool["number"])
         with content:
             st.subheader(tool["title"])
             st.caption(tool["meta"])
         with open_col:
-            if st.button("Open  →", key=f"open_{route}", use_container_width=True):
+            if st.button("Open →", key=f"open_{route}"):
                 go_to(route)
         st.divider()
 
@@ -101,51 +100,18 @@ def render_home() -> None:
 def render_tool(route: str) -> None:
     tool = TOOLS[route]
 
-    # Tool pages are intentionally compact; the home page keeps the editorial layout.
-    st.markdown(
-        """
-        <style>
-        .main .block-container {
-            max-width: 940px !important;
-            padding-top: 0.45rem !important;
-            padding-bottom: 1.2rem !important;
-        }
-        .main .block-container > div[data-testid="stVerticalBlock"] {
-            gap: 0.42rem !important;
-        }
-        [data-testid="stFileUploaderDropzone"] {
-            min-height: 78px !important;
-            padding: 0.55rem 0.7rem !important;
-        }
-        [data-testid="stFileUploaderDropzone"] section {
-            padding: 0 !important;
-        }
-        [data-testid="stFileUploaderDropzone"] p,
-        [data-testid="stFileUploaderDropzone"] small {
-            font-size: 0.69rem !important;
-            line-height: 1.25 !important;
-        }
-        [data-testid="stWidgetLabel"] {
-            margin-bottom: 0.15rem !important;
-        }
-        [data-testid="stWidgetLabel"] p {
-            font-size: 0.74rem !important;
-        }
-        .stButton > button, .stDownloadButton > button {
-            min-height: 38px !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+    # Keep every workbench compact: the center column is intentionally narrow.
+    left_gutter, workbench, right_gutter = st.columns([1.55, 6.9, 1.55])
+    with workbench:
+        back_col, title_col = st.columns([1.15, 5.85], vertical_alignment="center")
+        with back_col:
+            if st.button("← Tools", key="tool_back"):
+                go_to("home")
+        with title_col:
+            st.markdown(f"### {tool['title']}")
 
-    number, heading = st.columns([0.45, 6.8], vertical_alignment="center")
-    with number:
-        st.caption(tool["number"])
-    with heading:
-        st.markdown(f"### {tool['title']}")
-
-    tool["runner"]()
+        st.markdown('<div class="workbench-rule"></div>', unsafe_allow_html=True)
+        tool["runner"]()
 
 
 render_topbar()

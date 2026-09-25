@@ -17,7 +17,7 @@ def run_app():
     if "output_path_en" not in st.session_state:
         st.session_state["output_path_en"] = None
 
-    upload_col, action_col = st.columns([4.8, 1.2], vertical_alignment="bottom")
+    upload_col, action_col = st.columns([5.3, 1.3], vertical_alignment="bottom")
     with upload_col:
         uploaded_report = st.file_uploader(
             "Source report",
@@ -26,8 +26,7 @@ def run_app():
         )
     with action_col:
         submit = st.button(
-            "Create reference",
-            use_container_width=True,
+            "Create",
             key="ref_creator_submit",
             type="primary",
         )
@@ -98,7 +97,7 @@ def run_app():
         st.caption("Generated files")
 
         if st.session_state["output_path_fr"]:
-            name_col, dl_col = st.columns([4.8, 1.2], vertical_alignment="center")
+            name_col, dl_col = st.columns([5.3, 1.3], vertical_alignment="center")
             with name_col:
                 st.markdown(f"**French reference** · {st.session_state['output_path_fr'].name}")
             with dl_col:
@@ -108,11 +107,10 @@ def run_app():
                         data=f,
                         file_name=st.session_state["output_path_fr"].name,
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                        use_container_width=True,
                     )
 
         if st.session_state["output_path_en"]:
-            name_col, dl_col = st.columns([4.8, 1.2], vertical_alignment="center")
+            name_col, dl_col = st.columns([5.3, 1.3], vertical_alignment="center")
             with name_col:
                 st.markdown(f"**English reference** · {st.session_state['output_path_en'].name}")
             with dl_col:
@@ -122,5 +120,4 @@ def run_app():
                         data=f,
                         file_name=st.session_state["output_path_en"].name,
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                        use_container_width=True,
                     )
