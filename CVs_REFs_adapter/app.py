@@ -33,83 +33,54 @@ if "resume_results" not in st.session_state:
 
 
 def run_app():
-    left, right = st.columns([1.75, 0.85], gap="large")
+    st.subheader("Tender / AO")
+    ao_title = st.text_input(
+        "Title",
+        placeholder="Paste the tender or AO title",
+        label_visibility="collapsed",
+    )
 
-    with left:
-        with st.container(border=True):
-            st.markdown('<div class="panel-kicker">OPPORTUNITY</div>', unsafe_allow_html=True)
-            st.markdown('<div class="panel-title">Tender context</div>', unsafe_allow_html=True)
-            st.markdown(
-                '<div class="panel-help">Give Gemini the opportunity title it should tailor the documents against.</div>',
-                unsafe_allow_html=True,
-            )
-            ao_title = st.text_input(
-                "Tender / AO title",
-                placeholder="e.g. Technical assistance for climate finance programme implementation",
-            )
-
-        with st.container(border=True):
-            st.markdown('<div class="panel-kicker">SOURCE FILES</div>', unsafe_allow_html=True)
-            st.markdown('<div class="panel-title">Documents to tailor</div>', unsafe_allow_html=True)
-            st.markdown(
-                '<div class="panel-help">Use either input independently, or process a reference and several CVs together.</div>',
-                unsafe_allow_html=True,
-            )
-            ref_col, cv_col = st.columns(2, gap="medium")
-            with ref_col:
-                uploaded_ref = st.file_uploader(
-                    "Project reference (.docx)",
-                    type=["docx"],
-                    key="ref",
-                )
-            with cv_col:
-                uploaded_resumes = st.file_uploader(
-                    "Consultant CVs (.docx)",
-                    type=["docx"],
-                    accept_multiple_files=True,
-                    key="adapter_resumes",
-                )
-
-    with right:
-        st.markdown(
-            """
-            <div class="side-summary">
-                <div class="summary-label">OUTPUT</div>
-                <h3>Tailored Word documents</h3>
-                <ul>
-                    <li>Relevant experience is prioritized against the AO title.</li>
-                    <li>Original source files stay untouched.</li>
-                    <li>Each output is returned as a new .docx file.</li>
-                </ul>
-            </div>
-            """,
-            unsafe_allow_html=True,
+    st.write("")
+    st.subheader("Documents")
+    ref_col, cv_col = st.columns(2, gap="large")
+    with ref_col:
+        uploaded_ref = st.file_uploader(
+            "Project reference",
+            type=["docx"],
+            key="ref",
         )
-        st.write("")
+    with cv_col:
+        uploaded_resumes = st.file_uploader(
+            "Consultant CVs",
+            type=["docx"],
+            accept_multiple_files=True,
+            key="adapter_resumes",
+        )
+
+    st.divider()
+    _, action_col = st.columns([4.2, 1.25])
+    with action_col:
         run_now = st.button(
-            "Generate tailored files",
+            "Generate",
             key="submit_refs_cvs_btn",
             type="primary",
             use_container_width=True,
         )
-        st.caption("You can download every generated file directly from this page.")
 
-    # Reset outputs when input is cleared
     if not uploaded_ref:
         st.session_state["ref_result"] = None
     if not uploaded_resumes:
         st.session_state["resume_results"] = []
 
     if run_now and not ao_title:
-        st.warning("Add the tender / AO title before generating the files.")
+        st.warning("Add the tender / AO title first.")
 
     if run_now and ao_title:
-        # Fresh run: avoid duplicated results when the button is clicked again.
         st.session_state["resume_results"] = []
         st.session_state["ref_result"] = None
 
         if uploaded_ref:
-            with st.spinner("Tailoring the reference document..."):
+            with st.spinner("Tailoring reference..."):
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp:
                     tmp.write(uploaded_ref.read())
                     input_path = tmp.name
@@ -124,7 +95,6 @@ def run_app():
                     output_path = os.path.join(tempfile.gettempdir(), output_name)
                     save_adapted_docx(input_path, output_path, adapted, ao_title)
 
-                    # Translate final output before showing download
                     try:
                         from docx import Document
                         from deep_translator import GoogleTranslator
@@ -188,19 +158,24 @@ def run_app():
                     )
 
     if st.session_state["ref_result"] or st.session_state["resume_results"]:
-        st.markdown('<div class="output-block"><div class="output-title">Ready to download</div></div>', unsafe_allow_html=True)
+        st.write("")
+        st.subheader("Ready")
         downloads = []
         if st.session_state["ref_result"]:
             downloads.append(("Reference", st.session_state["ref_result"]))
         downloads.extend(("CV", result) for result in st.session_state["resume_results"])
 
-        cols = st.columns(min(3, max(1, len(downloads))), gap="medium")
-        for index, (kind, result) in enumerate(downloads):
-            with cols[index % len(cols)]:
+        for kind, result in downloads:
+            name_col, download_col = st.columns([4.2, 1.25], vertical_alignment="center")
+            with name_col:
+                st.write(f"**{result['original']}**")
+                st.caption(kind)
+            with download_col:
                 st.download_button(
-                    f"{kind} · {result['original']}",
+                    "Download",
                     data=result["data"],
                     file_name=result["name"],
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                     use_container_width=True,
                 )
+            st.divider()

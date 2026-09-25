@@ -17,41 +17,23 @@ def run_app():
     if "output_path_en" not in st.session_state:
         st.session_state["output_path_en"] = None
 
-    left, right = st.columns([1.75, 0.85], gap="large")
+    st.subheader("Source report")
+    uploaded_report = st.file_uploader(
+        "Project report",
+        type=["docx", "pdf", "pptx", "txt"],
+        key="ref_creator_report",
+        label_visibility="collapsed",
+    )
 
-    with left:
-        with st.container(border=True):
-            st.markdown('<div class="panel-kicker">SOURCE REPORT</div>', unsafe_allow_html=True)
-            st.markdown('<div class="panel-title">Drop in the project document</div>', unsafe_allow_html=True)
-            st.markdown(
-                '<div class="panel-help">Gemini extracts the relevant project information and maps it to the existing ACS reference template.</div>',
-                unsafe_allow_html=True,
-            )
-            uploaded_report = st.file_uploader(
-                "Project report",
-                type=["docx", "pdf", "pptx", "txt"],
-                key="ref_creator_report",
-                label_visibility="collapsed",
-            )
-
-    with right:
-        st.markdown(
-            """
-            <div class="side-summary">
-                <div class="summary-label">DELIVERABLE</div>
-                <h3>One reference, two languages</h3>
-                <ul>
-                    <li>French ACS reference sheet (VF)</li>
-                    <li>English ACS reference sheet (VA)</li>
-                    <li>Both delivered as editable Word files</li>
-                </ul>
-            </div>
-            """,
-            unsafe_allow_html=True,
+    st.divider()
+    _, action_col = st.columns([4.2, 1.25])
+    with action_col:
+        submit = st.button(
+            "Create reference",
+            use_container_width=True,
+            key="ref_creator_submit",
+            type="primary",
         )
-        st.write("")
-        submit = st.button("Create reference", use_container_width=True, key="ref_creator_submit", type="primary")
-        st.caption("Supported inputs: Word, PDF, PowerPoint and TXT.")
 
     if uploaded_report and "last_uploaded" in st.session_state:
         if uploaded_report.name != st.session_state["last_uploaded"]:
@@ -88,15 +70,15 @@ def run_app():
         doc.save(output_path)
 
     if submit and not uploaded_report:
-        st.warning("Upload a project report before creating the reference.")
+        st.warning("Upload a project report first.")
 
     if submit and uploaded_report:
         report_text = load_report_text(uploaded_report)
 
-        with st.spinner("Extracting project information with Gemini..."):
+        with st.spinner("Extracting project information..."):
             st.session_state["field_values"] = fill_template_with_debug(TEMPLATE_PATH, report_text)
 
-        with st.spinner("Generating the French reference..."):
+        with st.spinner("Creating French version..."):
             filled_doc = fill_reference_table(TEMPLATE_PATH, st.session_state["field_values"])
 
             mission_name = st.session_state["field_values"].get("Nom de la mission", "output").strip()
@@ -107,7 +89,7 @@ def run_app():
             filled_doc.save(path_fr)
             st.session_state["output_path_fr"] = path_fr
 
-        with st.spinner("Creating the English version..."):
+        with st.spinner("Creating English version..."):
             en_name = f"{mission_name_safe}_ref_VA.docx"
             path_en = Path(tempfile.gettempdir()) / en_name
             translate_docx(path_fr, path_en, target_lang="en")
@@ -116,27 +98,37 @@ def run_app():
         st.session_state["generated"] = True
 
     if st.session_state["output_path_fr"] or st.session_state["output_path_en"]:
-        st.markdown('<div class="output-block"><div class="output-title">Reference files ready</div></div>', unsafe_allow_html=True)
-        out_fr, out_en = st.columns(2, gap="medium")
+        st.write("")
+        st.subheader("Ready")
 
         if st.session_state["output_path_fr"]:
-            with out_fr:
+            name_col, dl_col = st.columns([4.2, 1.25], vertical_alignment="center")
+            with name_col:
+                st.write("**French reference**")
+                st.caption(st.session_state["output_path_fr"].name)
+            with dl_col:
                 with open(st.session_state["output_path_fr"], "rb") as f:
                     st.download_button(
-                        label="Download French version (VF)",
+                        "Download",
                         data=f,
                         file_name=st.session_state["output_path_fr"].name,
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         use_container_width=True,
                     )
+            st.divider()
 
         if st.session_state["output_path_en"]:
-            with out_en:
+            name_col, dl_col = st.columns([4.2, 1.25], vertical_alignment="center")
+            with name_col:
+                st.write("**English reference**")
+                st.caption(st.session_state["output_path_en"].name)
+            with dl_col:
                 with open(st.session_state["output_path_en"], "rb") as f:
                     st.download_button(
-                        label="Download English version (VA)",
+                        "Download",
                         data=f,
                         file_name=st.session_state["output_path_en"].name,
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         use_container_width=True,
                     )
+            st.divider()

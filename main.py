@@ -6,11 +6,10 @@ from CVs_REFs_adapter.app import run_app as run_cvs_refs_adapter
 from REF_creater.app import run_app as run_ref_creator
 from CVs_adapter.app import run_app as run_cvs_adapter
 
-
 ROOT = Path(__file__).resolve().parent
 
 st.set_page_config(
-    page_title="BD Workspace | Africa Climate Solutions",
+    page_title="BD Tools | Africa Climate Solutions",
     page_icon="◈",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -27,26 +26,20 @@ load_css(ROOT / "style.css")
 TOOLS = {
     "cvs_refs": {
         "number": "01",
-        "label": "Tender tailoring",
         "title": "Adapt CVs & references",
-        "description": "Tailor existing consultant CVs and project references to a specific opportunity.",
-        "detail": "Word in · Gemini-assisted tailoring · Word out",
+        "meta": "Tailor existing bid material to a tender or AO.",
         "runner": run_cvs_refs_adapter,
     },
     "reference": {
         "number": "02",
-        "label": "Reference production",
         "title": "Create a project reference",
-        "description": "Turn a report into a structured ACS project reference in French and English.",
-        "detail": "PDF / Word / PPT in · structured extraction · bilingual Word out",
+        "meta": "Turn a source report into French and English reference sheets.",
         "runner": run_ref_creator,
     },
     "cv_template": {
         "number": "03",
-        "label": "CV formatting",
-        "title": "Move CVs into a template",
-        "description": "Map one or more source CVs into a target Word CV template automatically.",
-        "detail": "CVs + template in · field mapping · formatted CVs out",
+        "title": "Format CVs in a template",
+        "meta": "Move source CV content into a selected Word template.",
         "runner": run_cvs_adapter,
     },
 }
@@ -69,105 +62,63 @@ def go_to(route: str) -> None:
 
 
 def render_topbar() -> None:
-    status_class = "ok" if gemini_is_configured() else "warn"
-    status_text = "Gemini ready" if gemini_is_configured() else "Gemini key missing"
-
-    left, right = st.columns([5, 1.25], vertical_alignment="center")
-    with left:
-        brand_a, brand_b = st.columns([0.42, 4.58], vertical_alignment="center")
-        with brand_a:
-            st.image(str(ROOT / "logo.png"), width=42)
-        with brand_b:
-            st.markdown(
-                """
-                <div class="brand-lockup">
-                    <div class="brand-name">BD Workspace</div>
-                    <div class="brand-org">Africa Climate Solutions</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-    with right:
-        st.markdown(
-            f'<div class="api-chip {status_class}"><span></span>{status_text}</div>',
-            unsafe_allow_html=True,
-        )
-
-    st.markdown('<div class="top-rule"></div>', unsafe_allow_html=True)
+    brand, spacer, action = st.columns([2.4, 5.4, 1.2], vertical_alignment="center")
+    with brand:
+        logo, name = st.columns([0.34, 1.8], vertical_alignment="center")
+        with logo:
+            st.image(str(ROOT / "logo.png"), width=34)
+        with name:
+            st.markdown("**BD Tools**")
+    with action:
+        if st.session_state.bd_route != "home":
+            if st.button("All tools", key="top_home", use_container_width=True):
+                go_to("home")
+    st.divider()
 
 
 def render_home() -> None:
-    st.markdown(
-        """
-        <section class="home-intro">
-            <div class="home-kicker">BUSINESS DEVELOPMENT</div>
-            <h1>What do you want to produce?</h1>
-            <p>Choose a workflow. Each tool opens in its own workspace — no tabs, no side menu.</p>
-        </section>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.markdown("### Business development")
+    st.title("Work on the document, not the formatting.")
+    st.caption("Three focused tools for recurring bid-preparation work.")
+    st.write("")
 
-    cols = st.columns(3, gap="large")
-    for col, (route, tool) in zip(cols, TOOLS.items()):
-        with col:
-            st.markdown(
-                f"""
-                <article class="launch-card">
-                    <div class="launch-topline">
-                        <span class="launch-number">{tool['number']}</span>
-                        <span class="launch-label">{tool['label']}</span>
-                    </div>
-                    <h2>{tool['title']}</h2>
-                    <p>{tool['description']}</p>
-                    <div class="launch-detail">{tool['detail']}</div>
-                </article>
-                """,
-                unsafe_allow_html=True,
-            )
-            if st.button("Open workspace  →", key=f"open_{route}", use_container_width=True):
+    for route, tool in TOOLS.items():
+        number, content, open_col = st.columns([0.6, 5.5, 1.25], vertical_alignment="center")
+        with number:
+            st.caption(tool["number"])
+        with content:
+            st.subheader(tool["title"])
+            st.caption(tool["meta"])
+        with open_col:
+            if st.button("Open  →", key=f"open_{route}", use_container_width=True):
                 go_to(route)
+        st.divider()
 
-    st.markdown(
-        """
-        <div class="home-note">
-            <strong>How it works:</strong> source documents stay unchanged. Each workflow generates new Word files for download.
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    if not gemini_is_configured():
+        st.warning("Gemini API key is not configured for this deployment.")
 
 
 def render_tool(route: str) -> None:
     tool = TOOLS[route]
-    nav_col, blank_col = st.columns([1.25, 5])
-    with nav_col:
-        if st.button("←  Workspace", key="back_home", use_container_width=True):
-            go_to("home")
 
-    st.markdown(
-        f"""
-        <section class="workbench-head">
-            <div class="workbench-index">{tool['number']}</div>
-            <div>
-                <div class="workbench-kicker">{tool['label'].upper()}</div>
-                <h1>{tool['title']}</h1>
-                <p>{tool['description']}</p>
-            </div>
-        </section>
-        """,
-        unsafe_allow_html=True,
-    )
+    number, heading = st.columns([0.55, 6.5], vertical_alignment="bottom")
+    with number:
+        st.caption(tool["number"])
+    with heading:
+        st.title(tool["title"])
+        st.caption(tool["meta"])
 
+    st.write("")
     tool["runner"]()
 
 
 render_topbar()
 
-if st.session_state.bd_route == "home":
+route = st.session_state.bd_route
+if route == "home":
     render_home()
-elif st.session_state.bd_route in TOOLS:
-    render_tool(st.session_state.bd_route)
+elif route in TOOLS:
+    render_tool(route)
 else:
     st.session_state.bd_route = "home"
     st.rerun()
