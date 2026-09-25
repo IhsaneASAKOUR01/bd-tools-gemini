@@ -25,21 +25,21 @@ load_css(ROOT / "style.css")
 
 TOOLS = {
     "cvs_refs": {
-        "number": "01",
+        "nav": "CVs + References",
         "title": "Adapt CVs & references",
-        "meta": "Tailor existing bid material to a tender or AO.",
+        "hint": "Tender title · reference · consultant CVs",
         "runner": run_cvs_refs_adapter,
     },
     "reference": {
-        "number": "02",
+        "nav": "Reference Creator",
         "title": "Create a project reference",
-        "meta": "Turn a source report into French and English reference sheets.",
+        "hint": "Report in · French and English references out",
         "runner": run_ref_creator,
     },
     "cv_template": {
-        "number": "03",
+        "nav": "CV Template",
         "title": "Format CVs in a template",
-        "meta": "Move source CV content into a selected Word template.",
+        "hint": "Source CVs · target Word template",
         "runner": run_cvs_adapter,
     },
 }
@@ -53,7 +53,7 @@ def gemini_is_configured() -> bool:
 
 
 if "bd_route" not in st.session_state:
-    st.session_state.bd_route = "home"
+    st.session_state.bd_route = "cvs_refs"
 
 
 def go_to(route: str) -> None:
@@ -61,66 +61,52 @@ def go_to(route: str) -> None:
     st.rerun()
 
 
-def render_topbar() -> None:
-    brand, filler, state = st.columns([2.4, 6.2, 1.4], vertical_alignment="center")
+def render_chrome() -> None:
+    brand, nav1, nav2, nav3, status = st.columns(
+        [2.1, 1.55, 1.55, 1.35, 2.0],
+        vertical_alignment="center",
+        gap="small",
+    )
+
     with brand:
-        logo, name = st.columns([0.32, 1.7], vertical_alignment="center")
-        with logo:
-            st.image(str(ROOT / "logo.png"), width=30)
-        with name:
-            st.markdown("**BD Tools**")
-    with state:
-        if st.session_state.bd_route == "home" and gemini_is_configured():
-            st.caption("Gemini ready")
-    st.divider()
+        logo_col, text_col = st.columns([0.28, 1.72], vertical_alignment="center", gap="small")
+        with logo_col:
+            st.image(str(ROOT / "logo.png"), width=28)
+        with text_col:
+            st.markdown('<div class="brand-name">BD Tools</div>', unsafe_allow_html=True)
 
+    route = st.session_state.bd_route
+    for key, col in zip(["cvs_refs", "reference", "cv_template"], [nav1, nav2, nav3]):
+        with col:
+            if st.button(
+                TOOLS[key]["nav"],
+                key=f"nav_{key}",
+                type="primary" if route == key else "secondary",
+                use_container_width=False,
+            ):
+                go_to(key)
 
-def render_home() -> None:
-    st.markdown("### Business development")
-    st.title("Work on the document, not the formatting.")
-    st.caption("Three focused tools for recurring bid-preparation work.")
-    st.write("")
+    with status:
+        if gemini_is_configured():
+            st.markdown('<div class="status-ok">● Gemini connected</div>', unsafe_allow_html=True)
+        else:
+            st.markdown('<div class="status-missing">● Gemini key missing</div>', unsafe_allow_html=True)
 
-    for route, tool in TOOLS.items():
-        number, content, open_col = st.columns([0.55, 6.2, 1.15], vertical_alignment="center")
-        with number:
-            st.caption(tool["number"])
-        with content:
-            st.subheader(tool["title"])
-            st.caption(tool["meta"])
-        with open_col:
-            if st.button("Open →", key=f"open_{route}"):
-                go_to(route)
-        st.divider()
-
-    if not gemini_is_configured():
-        st.warning("Gemini API key is not configured for this deployment.")
+    st.markdown('<div class="chrome-rule"></div>', unsafe_allow_html=True)
 
 
 def render_tool(route: str) -> None:
     tool = TOOLS[route]
 
-    # Keep every workbench compact: the center column is intentionally narrow.
-    left_gutter, workbench, right_gutter = st.columns([1.55, 6.9, 1.55])
-    with workbench:
-        back_col, title_col = st.columns([1.15, 5.85], vertical_alignment="center")
-        with back_col:
-            if st.button("← Tools", key="tool_back"):
-                go_to("home")
-        with title_col:
-            st.markdown(f"### {tool['title']}")
+    title_col, hint_col = st.columns([3.1, 5.9], vertical_alignment="bottom")
+    with title_col:
+        st.markdown(f'<div class="tool-title">{tool["title"]}</div>', unsafe_allow_html=True)
+    with hint_col:
+        st.markdown(f'<div class="tool-hint">{tool["hint"]}</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="workbench-rule"></div>', unsafe_allow_html=True)
-        tool["runner"]()
+    st.markdown('<div class="title-rule"></div>', unsafe_allow_html=True)
+    tool["runner"]()
 
 
-render_topbar()
-
-route = st.session_state.bd_route
-if route == "home":
-    render_home()
-elif route in TOOLS:
-    render_tool(route)
-else:
-    st.session_state.bd_route = "home"
-    st.rerun()
+render_chrome()
+render_tool(st.session_state.bd_route)

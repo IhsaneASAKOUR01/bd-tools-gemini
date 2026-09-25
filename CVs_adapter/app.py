@@ -10,25 +10,27 @@ from .section_mapper import gpt_fill_as_dict
 
 
 def run_app():
-    cv_col, template_col = st.columns(2, gap="medium")
+    input_pane, output_pane = st.columns([1.12, 0.88], gap="large")
 
-    with cv_col:
-        uploaded_resumes = st.file_uploader(
-            "Source CVs",
-            type=["docx"],
-            accept_multiple_files=True,
-            key="template_adapter_resumes",
-        )
+    with input_pane:
+        st.markdown("**Input**")
 
-    with template_col:
-        uploaded_template = st.file_uploader(
-            "Target Word template",
-            type=["docx"],
-            key="template_adapter_template",
-        )
+        cv_col, template_col = st.columns(2, gap="medium")
+        with cv_col:
+            uploaded_resumes = st.file_uploader(
+                "Source CVs",
+                type=["docx"],
+                accept_multiple_files=True,
+                key="template_adapter_resumes",
+            )
 
-    action_left, action_right = st.columns([5.3, 1.3], vertical_alignment="center")
-    with action_right:
+        with template_col:
+            uploaded_template = st.file_uploader(
+                "Target Word template",
+                type=["docx"],
+                key="template_adapter_template",
+            )
+
         submit = st.button(
             "Format CVs",
             key="submit_cv_adapter",
@@ -72,17 +74,25 @@ def run_app():
                     }
                 )
 
-    if generated_files:
-        st.caption("Generated files")
-        for item in generated_files:
-            name_col, dl_col = st.columns([5.3, 1.3], vertical_alignment="center")
-            with name_col:
-                st.markdown(f"**{item['output_name']}**")
-            with dl_col:
-                with open(item["output_path"], "rb") as f:
-                    st.download_button(
-                        "Download",
-                        data=f,
-                        file_name=item["output_name"],
-                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    )
+    with output_pane:
+        with st.container(border=True):
+            st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
+
+            if not generated_files:
+                st.markdown(
+                    '<div class="output-empty">Formatted CVs will appear here.</div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                for item in generated_files:
+                    name_col, dl_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                    with name_col:
+                        st.markdown(f"**{item['output_name']}**")
+                    with dl_col:
+                        with open(item["output_path"], "rb") as f:
+                            st.download_button(
+                                "Download",
+                                data=f,
+                                file_name=item["output_name"],
+                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            )

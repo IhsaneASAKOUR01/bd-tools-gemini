@@ -1,10 +1,13 @@
 :root {
-    --ink: #10232f;
-    --muted: #697780;
-    --line: #e2e7ea;
-    --soft: #f7f9fa;
-    --accent: #0d89a5;
-    --white: #ffffff;
+    --ink: #172126;
+    --muted: #768087;
+    --line: #dfe3e4;
+    --line-strong: #c9cfd1;
+    --paper: #ffffff;
+    --canvas: #f3f2ee;
+    --panel: #f8f8f6;
+    --accent: #0f6f78;
+    --accent-dark: #0b5961;
 }
 
 html, body, [class*="css"] {
@@ -12,7 +15,7 @@ html, body, [class*="css"] {
 }
 
 html, body, .stApp {
-    background: var(--white) !important;
+    background: var(--canvas) !important;
     color: var(--ink) !important;
 }
 
@@ -24,98 +27,121 @@ section[data-testid="stSidebar"] {
 }
 
 header[data-testid="stHeader"] {
-    background: rgba(255,255,255,0.97) !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    background: transparent !important;
 }
 
 .main .block-container {
-    max-width: 1040px !important;
-    padding: 0.8rem 1.35rem 2.2rem !important;
+    width: min(96vw, 1480px) !important;
+    max-width: none !important;
+    padding: 1.05rem 1.25rem 1.2rem !important;
 }
 
-/* Compact typography */
-h1 {
-    color: var(--ink) !important;
-    font-size: 1.85rem !important;
-    line-height: 1.1 !important;
-    letter-spacing: -0.035em !important;
-    font-weight: 650 !important;
-    margin: 0.1rem 0 0.25rem !important;
+/* --- Application chrome --- */
+.brand-name {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    white-space: nowrap;
 }
 
-h2, h3 {
-    color: var(--ink) !important;
-    letter-spacing: -0.02em !important;
+.status-ok,
+.status-missing {
+    text-align: right;
+    font-size: 0.70rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+.status-ok { color: #43766e; }
+.status-missing { color: #9b5a4e; }
+
+.chrome-rule {
+    height: 1px;
+    background: var(--line-strong);
+    margin: 0.65rem 0 0.95rem;
 }
 
-h3 {
-    font-size: 1.05rem !important;
-    font-weight: 650 !important;
-    margin: 0.05rem 0 !important;
+.tool-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.55rem;
+    line-height: 1.06;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--ink);
 }
 
-[data-testid="stMarkdownContainer"] p {
-    font-size: 0.84rem;
-    line-height: 1.45;
+.tool-hint {
+    text-align: right;
+    font-size: 0.72rem;
+    line-height: 1.2;
+    color: var(--muted);
+    padding-bottom: 0.12rem;
 }
 
-[data-testid="stCaptionContainer"] {
-    color: var(--muted) !important;
-    font-size: 0.73rem !important;
-    line-height: 1.35 !important;
-}
-
-hr {
-    border: 0 !important;
-    border-top: 1px solid var(--line) !important;
-    margin: 0.65rem 0 0.75rem !important;
-}
-
-.workbench-rule {
+.title-rule {
     height: 1px;
     background: var(--line);
-    margin: 0.28rem 0 0.8rem;
+    margin: 0.6rem 0 0.9rem;
 }
 
-/* Labels */
+/* --- Dense UI rhythm --- */
+[data-testid="stVerticalBlock"] {
+    gap: 0.48rem !important;
+}
+
+[data-testid="stHorizontalBlock"] {
+    gap: 0.9rem !important;
+}
+
 [data-testid="stWidgetLabel"] {
-    margin-bottom: 0.08rem !important;
+    margin-bottom: 0.12rem !important;
 }
 
 [data-testid="stWidgetLabel"] p,
 label p {
-    color: #30424d !important;
-    font-size: 0.72rem !important;
-    font-weight: 650 !important;
+    color: #48545a !important;
+    font-size: 0.70rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.015em !important;
 }
 
-/* Text input: compact rather than stretched-looking */
+[data-testid="stCaptionContainer"] {
+    color: var(--muted) !important;
+    font-size: 0.69rem !important;
+}
+
+/* Text fields */
 [data-testid="stTextInput"] input {
-    min-height: 38px !important;
-    border: 1px solid #ccd5da !important;
-    border-radius: 5px !important;
-    background: #fff !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    border: 1px solid var(--line-strong) !important;
+    border-radius: 2px !important;
+    background: var(--paper) !important;
     box-shadow: none !important;
-    font-size: 0.81rem !important;
-    padding: 0.35rem 0.58rem !important;
+    font-size: 0.79rem !important;
+    padding: 0.32rem 0.52rem !important;
 }
 
 [data-testid="stTextInput"] input:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 2px rgba(13,137,165,0.08) !important;
+    box-shadow: 0 0 0 1px var(--accent) !important;
 }
 
-/* Compact upload controls */
+/* Uploaders */
 [data-testid="stFileUploader"] {
-    border: 0 !important;
     background: transparent !important;
 }
 
 [data-testid="stFileUploaderDropzone"] {
-    min-height: 72px !important;
-    padding: 0.48rem 0.62rem !important;
-    background: #fafbfb !important;
-    border: 1px dashed #c9d2d7 !important;
-    border-radius: 5px !important;
+    min-height: 76px !important;
+    padding: 0.5rem 0.7rem !important;
+    background: var(--paper) !important;
+    border: 1px dashed #b9c0c3 !important;
+    border-radius: 2px !important;
 }
 
 [data-testid="stFileUploaderDropzone"] section {
@@ -125,10 +151,10 @@ label p {
 [data-testid="stFileUploaderDropzone"] p,
 [data-testid="stFileUploaderDropzone"] small {
     font-size: 0.68rem !important;
-    line-height: 1.18 !important;
+    line-height: 1.2 !important;
 }
 
-/* Never force app actions to fill their column. */
+/* Buttons: compact, text-sized, square-ish */
 .stButton,
 .stDownloadButton {
     width: auto !important;
@@ -138,22 +164,22 @@ label p {
 .stDownloadButton > button {
     width: auto !important;
     min-width: 0 !important;
-    min-height: 35px !important;
-    padding: 0.34rem 0.72rem !important;
-    border-radius: 5px !important;
-    border: 1px solid #cbd5da !important;
-    background: #fff !important;
+    min-height: 33px !important;
+    padding: 0.30rem 0.68rem !important;
+    border-radius: 2px !important;
+    border: 1px solid var(--line-strong) !important;
+    background: var(--paper) !important;
     color: var(--ink) !important;
-    font-size: 0.74rem !important;
-    font-weight: 650 !important;
+    font-size: 0.71rem !important;
+    font-weight: 700 !important;
     box-shadow: none !important;
     white-space: nowrap !important;
 }
 
 .stButton > button:hover,
 .stDownloadButton > button:hover {
-    border-color: #98aab3 !important;
-    background: #fafcfc !important;
+    border-color: #99a4a8 !important;
+    background: #fbfbfa !important;
 }
 
 div[data-testid="stButton"] button[kind="primary"] {
@@ -163,41 +189,64 @@ div[data-testid="stButton"] button[kind="primary"] {
 }
 
 div[data-testid="stButton"] button[kind="primary"]:hover {
-    background: #173746 !important;
-    border-color: #173746 !important;
+    background: #27343a !important;
+    border-color: #27343a !important;
 }
 
-/* Keep vertical rhythm tight inside the workbench. */
-[data-testid="stVerticalBlock"] {
-    gap: 0.48rem !important;
+/* One purposeful output surface, not cards everywhere */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    border: 1px solid var(--line) !important;
+    border-radius: 2px !important;
+    background: var(--panel) !important;
+    box-shadow: none !important;
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] > div {
+    padding: 0.85rem 0.95rem !important;
+}
+
+.output-heading {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #6a7479;
+    text-transform: uppercase;
+    margin-bottom: 0.45rem;
+}
+
+.output-empty {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.05rem;
+    color: #9aa1a4;
+    line-height: 1.35;
+    margin-top: 0.55rem;
+}
+
+.file-row {
+    padding: 0.28rem 0;
+    border-bottom: 1px solid var(--line);
 }
 
 [data-testid="stAlert"] {
-    border-radius: 5px !important;
-    font-size: 0.75rem !important;
-    padding: 0.5rem 0.68rem !important;
+    border-radius: 2px !important;
+    font-size: 0.73rem !important;
+    padding: 0.48rem 0.62rem !important;
 }
 
-[data-testid="stExpander"] {
-    border: 0 !important;
-    border-top: 1px solid var(--line) !important;
-    border-radius: 0 !important;
-    background: #fff !important;
+/* Keep spinners and alerts compact */
+[data-testid="stSpinner"] {
+    font-size: 0.74rem !important;
 }
 
-[data-testid="stVerticalBlockBorderWrapper"] {
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    background: transparent !important;
-}
-
-@media (max-width: 850px) {
+@media (max-width: 900px) {
     .main .block-container {
-        padding: 0.7rem 0.85rem 1.8rem !important;
+        width: 100% !important;
+        padding: 0.75rem 0.75rem 1.1rem !important;
     }
 
-    h1 {
-        font-size: 1.55rem !important;
+    .tool-hint,
+    .status-ok,
+    .status-missing {
+        text-align: left;
     }
 }

@@ -17,16 +17,17 @@ def run_app():
     if "output_path_en" not in st.session_state:
         st.session_state["output_path_en"] = None
 
-    upload_col, action_col = st.columns([5.3, 1.3], vertical_alignment="bottom")
-    with upload_col:
+    input_pane, output_pane = st.columns([1.12, 0.88], gap="large")
+
+    with input_pane:
+        st.markdown("**Input**")
         uploaded_report = st.file_uploader(
             "Source report",
             type=["docx", "pdf", "pptx", "txt"],
             key="ref_creator_report",
         )
-    with action_col:
         submit = st.button(
-            "Create",
+            "Create reference",
             key="ref_creator_submit",
             type="primary",
         )
@@ -93,31 +94,32 @@ def run_app():
 
         st.session_state["generated"] = True
 
-    if st.session_state["output_path_fr"] or st.session_state["output_path_en"]:
-        st.caption("Generated files")
+    with output_pane:
+        with st.container(border=True):
+            st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
 
-        if st.session_state["output_path_fr"]:
-            name_col, dl_col = st.columns([5.3, 1.3], vertical_alignment="center")
-            with name_col:
-                st.markdown(f"**French reference** · {st.session_state['output_path_fr'].name}")
-            with dl_col:
-                with open(st.session_state["output_path_fr"], "rb") as f:
-                    st.download_button(
-                        "Download",
-                        data=f,
-                        file_name=st.session_state["output_path_fr"].name,
-                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    )
+            paths = []
+            if st.session_state["output_path_fr"]:
+                paths.append(("French", st.session_state["output_path_fr"]))
+            if st.session_state["output_path_en"]:
+                paths.append(("English", st.session_state["output_path_en"]))
 
-        if st.session_state["output_path_en"]:
-            name_col, dl_col = st.columns([5.3, 1.3], vertical_alignment="center")
-            with name_col:
-                st.markdown(f"**English reference** · {st.session_state['output_path_en'].name}")
-            with dl_col:
-                with open(st.session_state["output_path_en"], "rb") as f:
-                    st.download_button(
-                        "Download",
-                        data=f,
-                        file_name=st.session_state["output_path_en"].name,
-                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    )
+            if not paths:
+                st.markdown(
+                    '<div class="output-empty">The French and English reference files will appear here.</div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                for language, path in paths:
+                    name_col, dl_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                    with name_col:
+                        st.markdown(f"**{language} reference**")
+                        st.caption(path.name)
+                    with dl_col:
+                        with open(path, "rb") as f:
+                            st.download_button(
+                                "Download",
+                                data=f,
+                                file_name=path.name,
+                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            )

@@ -33,32 +33,35 @@ if "resume_results" not in st.session_state:
 
 
 def run_app():
-    title_col, action_col = st.columns([5.3, 1.3], vertical_alignment="bottom")
-    with title_col:
+    input_pane, output_pane = st.columns([1.12, 0.88], gap="large")
+
+    with input_pane:
+        st.markdown("**Input**")
+
         ao_title = st.text_input(
             "Tender / AO title",
             placeholder="Paste the tender or AO title",
         )
-    with action_col:
+
+        ref_col, cv_col = st.columns(2, gap="medium")
+        with ref_col:
+            uploaded_ref = st.file_uploader(
+                "Project reference",
+                type=["docx"],
+                key="ref",
+            )
+        with cv_col:
+            uploaded_resumes = st.file_uploader(
+                "Consultant CVs",
+                type=["docx"],
+                accept_multiple_files=True,
+                key="adapter_resumes",
+            )
+
         run_now = st.button(
-            "Generate",
+            "Generate adapted files",
             key="submit_refs_cvs_btn",
             type="primary",
-        )
-
-    ref_col, cv_col = st.columns(2, gap="medium")
-    with ref_col:
-        uploaded_ref = st.file_uploader(
-            "Project reference",
-            type=["docx"],
-            key="ref",
-        )
-    with cv_col:
-        uploaded_resumes = st.file_uploader(
-            "Consultant CVs",
-            type=["docx"],
-            accept_multiple_files=True,
-            key="adapter_resumes",
         )
 
     if not uploaded_ref:
@@ -151,21 +154,30 @@ def run_app():
                         }
                     )
 
-    if st.session_state["ref_result"] or st.session_state["resume_results"]:
-        st.caption("Generated files")
-        downloads = []
-        if st.session_state["ref_result"]:
-            downloads.append(("Reference", st.session_state["ref_result"]))
-        downloads.extend(("CV", result) for result in st.session_state["resume_results"])
+    with output_pane:
+        with st.container(border=True):
+            st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
 
-        for kind, result in downloads:
-            name_col, download_col = st.columns([5.3, 1.3], vertical_alignment="center")
-            with name_col:
-                st.markdown(f"**{result['original']}** · {kind}")
-            with download_col:
-                st.download_button(
-                    "Download",
-                    data=result["data"],
-                    file_name=result["name"],
-                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            downloads = []
+            if st.session_state["ref_result"]:
+                downloads.append(("Reference", st.session_state["ref_result"]))
+            downloads.extend(("CV", result) for result in st.session_state["resume_results"])
+
+            if not downloads:
+                st.markdown(
+                    '<div class="output-empty">Generated Word files will appear here.</div>',
+                    unsafe_allow_html=True,
                 )
+            else:
+                for kind, result in downloads:
+                    name_col, download_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                    with name_col:
+                        st.markdown(f"**{result['original']}**")
+                        st.caption(kind)
+                    with download_col:
+                        st.download_button(
+                            "Download",
+                            data=result["data"],
+                            file_name=result["name"],
+                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        )
