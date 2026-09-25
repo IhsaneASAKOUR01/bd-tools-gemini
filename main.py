@@ -27,7 +27,7 @@ TOOLS = {
     "cvs_refs": {
         "nav": "CVs + References",
         "title": "Adapt CVs & references",
-        "subtitle": "Tailor project references and consultant CVs to a tender.",
+        "subtitle": "Tailor consultant profiles and project references to a tender.",
         "runner": run_cvs_refs_adapter,
     },
     "reference": {
@@ -38,19 +38,11 @@ TOOLS = {
     },
     "cv_template": {
         "nav": "CV Template",
-        "title": "Format CVs in a template",
-        "subtitle": "Map source CVs into your target Word template.",
+        "title": "Format CVs",
+        "subtitle": "Apply a Word template to one or more source CVs.",
         "runner": run_cvs_adapter,
     },
 }
-
-
-def gemini_is_configured() -> bool:
-    try:
-        return bool(st.secrets.get("gemini", {}).get("api_key"))
-    except Exception:
-        return False
-
 
 if "bd_route" not in st.session_state:
     st.session_state.bd_route = "cvs_refs"
@@ -62,43 +54,54 @@ def go_to(route: str) -> None:
 
 
 def render_topbar() -> None:
-    brand, spacer, nav1, nav2, nav3, status = st.columns(
-        [1.35, 1.15, 1.25, 1.35, 1.05, 0.95],
+    route = st.session_state.bd_route
+
+    brand, nav1, nav2, nav3, flex = st.columns(
+        [1.65, 1.28, 1.22, 1.0, 2.85],
         vertical_alignment="center",
         gap="small",
     )
 
     with brand:
-        logo_col, name_col = st.columns([0.22, 1.78], vertical_alignment="center", gap="small")
+        logo_col, product_col = st.columns([1.25, 0.7], vertical_alignment="center", gap="small")
         with logo_col:
-            st.image(str(ROOT / "logo.png"), width=25)
-        with name_col:
-            st.markdown('<div class="brand-lockup"><strong>BD</strong> Tools</div>', unsafe_allow_html=True)
+            st.image(str(ROOT / "logo.png"), width=112)
+        with product_col:
+            st.markdown('<div class="product-name">BD Tools</div>', unsafe_allow_html=True)
 
-    route = st.session_state.bd_route
     for key, col in zip(["cvs_refs", "reference", "cv_template"], [nav1, nav2, nav3]):
         with col:
-            active = route == key
-            label = f"{TOOLS[key]['nav']}" + ("  •" if active else "")
-            if st.button(label, key=f"nav_{key}", type="secondary"):
+            if st.button(TOOLS[key]["nav"], key=f"nav_{key}", type="secondary"):
                 go_to(key)
 
-    with status:
-        state = "connected" if gemini_is_configured() else "missing"
-        label = "Gemini" if gemini_is_configured() else "Add Gemini key"
-        st.markdown(
-            f'<div class="api-state {state}"><span></span>{label}</div>',
-            unsafe_allow_html=True,
-        )
+    # Active route gets a precise underline without turning navigation into pills/tabs.
+    st.markdown(
+        f"""
+        <style>
+        .st-key-nav_{route} button {{
+            color: #132f44 !important;
+            font-weight: 750 !important;
+            border-bottom: 2px solid #0b87a3 !important;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    st.markdown('<div class="top-rule"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="app-rule"></div>', unsafe_allow_html=True)
 
 
 def render_tool(route: str) -> None:
     tool = TOOLS[route]
-    st.markdown(f'<h1 class="page-title">{tool["title"]}</h1>', unsafe_allow_html=True)
-    st.markdown(f'<div class="page-subtitle">{tool["subtitle"]}</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-rule"></div>', unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class="tool-heading">
+            <h1>{tool['title']}</h1>
+            <p>{tool['subtitle']}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     tool["runner"]()
 
 

@@ -10,12 +10,12 @@ from .section_mapper import gpt_fill_as_dict
 
 
 def run_app():
-    input_pane, output_pane = st.columns([1.12, 0.88], gap="large")
+    input_pane, output_pane = st.columns([1.18, 0.82], gap="large")
 
     with input_pane:
-        st.markdown("**Input**")
+        st.markdown('<div class="pane-label">Files</div>', unsafe_allow_html=True)
 
-        cv_col, template_col = st.columns(2, gap="medium")
+        cv_col, template_col = st.columns([1.05, 0.95], gap="medium")
         with cv_col:
             uploaded_resumes = st.file_uploader(
                 "Source CVs",
@@ -26,7 +26,7 @@ def run_app():
 
         with template_col:
             uploaded_template = st.file_uploader(
-                "Target Word template",
+                "Word template",
                 type=["docx"],
                 key="template_adapter_template",
             )
@@ -75,18 +75,22 @@ def run_app():
                 )
 
     with output_pane:
-        st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
+        st.markdown('<div class="results-head">Results</div>', unsafe_allow_html=True)
 
         if not generated_files:
             st.markdown(
-                '<div class="output-empty">Formatted CVs will appear here.</div>',
+                '<div class="results-empty">Formatted CVs will appear here after processing.</div>',
                 unsafe_allow_html=True,
             )
         else:
             for item in generated_files:
-                name_col, dl_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                name_col, dl_col = st.columns([3.8, 1.0], vertical_alignment="center")
                 with name_col:
-                    st.markdown(f"**{item['output_name']}**")
+                    st.markdown(
+                        f'<div class="result-row"><div class="result-title">{item["output_name"]}</div>'
+                        f'<div class="result-meta">Word document</div></div>',
+                        unsafe_allow_html=True,
+                    )
                 with dl_col:
                     with open(item["output_path"], "rb") as f:
                         st.download_button(

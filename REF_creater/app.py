@@ -17,12 +17,12 @@ def run_app():
     if "output_path_en" not in st.session_state:
         st.session_state["output_path_en"] = None
 
-    input_pane, output_pane = st.columns([1.12, 0.88], gap="large")
+    input_pane, output_pane = st.columns([1.18, 0.82], gap="large")
 
     with input_pane:
-        st.markdown("**Input**")
+        st.markdown('<div class="pane-label">Source</div>', unsafe_allow_html=True)
         uploaded_report = st.file_uploader(
-            "Source report",
+            "Project report",
             type=["docx", "pdf", "pptx", "txt"],
             key="ref_creator_report",
         )
@@ -95,25 +95,28 @@ def run_app():
         st.session_state["generated"] = True
 
     with output_pane:
-        st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
+        st.markdown('<div class="results-head">Results</div>', unsafe_allow_html=True)
 
         paths = []
         if st.session_state["output_path_fr"]:
-            paths.append(("French", st.session_state["output_path_fr"]))
+            paths.append(("French reference", st.session_state["output_path_fr"]))
         if st.session_state["output_path_en"]:
-            paths.append(("English", st.session_state["output_path_en"]))
+            paths.append(("English reference", st.session_state["output_path_en"]))
 
         if not paths:
             st.markdown(
-                '<div class="output-empty">The French and English reference files will appear here.</div>',
+                '<div class="results-empty">French and English Word files will appear here.</div>',
                 unsafe_allow_html=True,
             )
         else:
             for language, path in paths:
-                name_col, dl_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                name_col, dl_col = st.columns([3.8, 1.0], vertical_alignment="center")
                 with name_col:
-                    st.markdown(f"**{language} reference**")
-                    st.caption(path.name)
+                    st.markdown(
+                        f'<div class="result-row"><div class="result-title">{language}</div>'
+                        f'<div class="result-meta">{path.name}</div></div>',
+                        unsafe_allow_html=True,
+                    )
                 with dl_col:
                     with open(path, "rb") as f:
                         st.download_button(

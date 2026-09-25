@@ -33,17 +33,17 @@ if "resume_results" not in st.session_state:
 
 
 def run_app():
-    input_pane, output_pane = st.columns([1.12, 0.88], gap="large")
+    input_pane, output_pane = st.columns([1.18, 0.82], gap="large")
 
     with input_pane:
-        st.markdown("**Input**")
+        st.markdown('<div class="pane-label">Tender & files</div>', unsafe_allow_html=True)
 
         ao_title = st.text_input(
             "Tender / AO title",
             placeholder="Paste the tender or AO title",
         )
 
-        ref_col, cv_col = st.columns(2, gap="medium")
+        ref_col, cv_col = st.columns([0.95, 1.05], gap="medium")
         with ref_col:
             uploaded_ref = st.file_uploader(
                 "Project reference",
@@ -155,7 +155,7 @@ def run_app():
                     )
 
     with output_pane:
-        st.markdown('<div class="output-heading">Output</div>', unsafe_allow_html=True)
+        st.markdown('<div class="results-head">Results</div>', unsafe_allow_html=True)
 
         downloads = []
         if st.session_state["ref_result"]:
@@ -164,15 +164,18 @@ def run_app():
 
         if not downloads:
             st.markdown(
-                '<div class="output-empty">Generated Word files will appear here.</div>',
+                '<div class="results-empty">Generated Word files will appear here.</div>',
                 unsafe_allow_html=True,
             )
         else:
             for kind, result in downloads:
-                name_col, download_col = st.columns([3.7, 1.0], vertical_alignment="center")
+                name_col, download_col = st.columns([3.8, 1.0], vertical_alignment="center")
                 with name_col:
-                    st.markdown(f"**{result['original']}**")
-                    st.caption(kind)
+                    st.markdown(
+                        f'<div class="result-row"><div class="result-title">{result["original"]}</div>'
+                        f'<div class="result-meta">{kind}</div></div>',
+                        unsafe_allow_html=True,
+                    )
                 with download_col:
                     st.download_button(
                         "Download",

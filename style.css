@@ -1,19 +1,21 @@
 :root {
-    --ink: #151719;
-    --text: #303438;
-    --muted: #7a8085;
-    --soft: #a8adb1;
-    --line: #e7e9ea;
-    --line-strong: #d6dadd;
+    --navy: #132f44;
+    --cyan: #0b87a3;
+    --ink: #172027;
+    --text: #404950;
+    --muted: #7b858d;
+    --line: #e5e9ec;
+    --line-strong: #d3d9dd;
     --paper: #ffffff;
-    --accent: #11818a;
 }
 
 html, body, [class*="css"] {
     font-family: Inter, "Segoe UI", Arial, sans-serif !important;
 }
 
-html, body, .stApp {
+html, body, .stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"] {
     background: #ffffff !important;
     color: var(--ink) !important;
 }
@@ -31,192 +33,247 @@ header[data-testid="stHeader"] {
     background: transparent !important;
 }
 
+/* The selector that actually controls current Streamlit page spacing. */
+[data-testid="stMainBlockContainer"],
 .main .block-container {
-    width: min(92vw, 1320px) !important;
-    max-width: 1320px !important;
-    padding: 1.15rem 0 2rem !important;
+    width: min(94vw, 1220px) !important;
+    max-width: 1220px !important;
+    padding-top: 18px !important;
+    padding-bottom: 32px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
-/* Top bar */
-.brand-lockup {
-    color: var(--ink);
-    font-size: 0.91rem;
-    letter-spacing: -0.015em;
-    white-space: nowrap;
-}
-
-.brand-lockup strong {
-    font-weight: 780;
-}
-
-.api-state {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--muted);
-    font-size: 0.67rem;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.api-state span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    display: inline-block;
-    background: #b5b9bc;
-}
-
-.api-state.connected span { background: #4b9a75; }
-.api-state.missing span { background: #c47f68; }
-
-.top-rule {
-    height: 1px;
-    background: var(--line);
-    margin: 0.72rem 0 1.65rem;
-}
-
-/* Navigation is text-like, not a pill/tab bar */
-.stButton > button {
-    width: auto !important;
-    min-width: 0 !important;
-    min-height: 30px !important;
-    height: 30px !important;
-    padding: 0 0.2rem !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    color: #6f767b !important;
-    font-size: 0.70rem !important;
-    font-weight: 650 !important;
-    white-space: nowrap !important;
-}
-
-.stButton > button:hover {
-    color: var(--ink) !important;
-    background: transparent !important;
-}
-
-div[data-testid="stButton"] button[kind="primary"] {
-    min-height: 32px !important;
-    height: 32px !important;
-    padding: 0 0.72rem !important;
-    border-radius: 4px !important;
-    background: var(--ink) !important;
-    color: #ffffff !important;
-    font-weight: 720 !important;
-}
-
-div[data-testid="stButton"] button[kind="primary"]:hover {
-    background: #2b2e31 !important;
-    color: #ffffff !important;
-}
-
-/* Page heading */
-
-.page-title {
-    margin: 0 !important;
-    padding: 0 !important;
-    color: var(--ink) !important;
-    font-family: Georgia, "Times New Roman", serif !important;
-    font-size: 1.72rem !important;
-    line-height: 1.08 !important;
-    font-weight: 600 !important;
-    letter-spacing: -0.028em !important;
-}
-
-.page-subtitle {
-    color: var(--muted);
-    font-size: 0.73rem;
-    line-height: 1.4;
-    margin-top: 0.34rem;
-}
-
-.page-rule {
-    height: 1px;
-    background: var(--line);
-    margin: 0.95rem 0 1.05rem;
-}
-
-/* Layout rhythm */
 [data-testid="stVerticalBlock"] {
-    gap: 0.48rem !important;
+    gap: 0.52rem !important;
 }
 
 [data-testid="stHorizontalBlock"] {
-    gap: 2.2rem !important;
+    gap: 1.55rem !important;
 }
 
-/* Native markdown headings used inside panes */
-[data-testid="stMarkdownContainer"] p strong:only-child {
-    color: var(--ink) !important;
-    font-size: 0.70rem !important;
+/* ---------- Header ---------- */
+.product-name {
+    color: var(--navy);
+    font-size: 0.76rem;
+    line-height: 1;
+    font-weight: 760;
+    white-space: nowrap;
+    padding-left: 0.15rem;
+    border-left: 1px solid var(--line-strong);
+}
+
+.app-rule {
+    height: 1px;
+    background: var(--line);
+    margin: 0.48rem 0 1.35rem;
+}
+
+/* Navigation behaves like a professional command bar, not a set of cards. */
+.st-key-nav_cvs_refs .stButton > button,
+.st-key-nav_reference .stButton > button,
+.st-key-nav_cv_template .stButton > button {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 0.1rem 0.28rem !important;
+    border: 0 !important;
+    border-bottom: 2px solid transparent !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #68747d !important;
+    box-shadow: none !important;
+    font-size: 0.72rem !important;
+    font-weight: 630 !important;
+    white-space: nowrap !important;
+}
+
+.st-key-nav_cvs_refs .stButton > button:hover,
+.st-key-nav_reference .stButton > button:hover,
+.st-key-nav_cv_template .stButton > button:hover {
+    color: var(--navy) !important;
+    background: transparent !important;
+}
+
+/* ---------- Page heading ---------- */
+.tool-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    margin: 0 0 1.05rem;
+}
+
+.tool-heading h1 {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--navy) !important;
+    font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+    font-size: 1.45rem !important;
+    line-height: 1.1 !important;
     font-weight: 760 !important;
-    letter-spacing: 0.01em;
+    letter-spacing: -0.035em !important;
+    white-space: nowrap;
 }
 
+.tool-heading p {
+    margin: 0 !important;
+    color: var(--muted) !important;
+    font-size: 0.72rem !important;
+    line-height: 1.35 !important;
+}
+
+/* ---------- Pane labels ---------- */
+.pane-label {
+    color: var(--navy);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.42rem;
+}
+
+.results-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 22px;
+    padding-bottom: 0.42rem;
+    margin-bottom: 0.4rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--navy);
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.075em;
+    text-transform: uppercase;
+}
+
+.results-empty {
+    color: #9aa3aa;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    padding-top: 0.25rem;
+}
+
+/* labels */
 [data-testid="stWidgetLabel"] {
-    margin-bottom: 0.12rem !important;
+    margin-bottom: 0.16rem !important;
 }
 
 [data-testid="stWidgetLabel"] p,
 label p {
-    color: #545a5f !important;
-    font-size: 0.69rem !important;
-    font-weight: 680 !important;
-    letter-spacing: 0 !important;
+    color: #4d5961 !important;
+    font-size: 0.68rem !important;
+    font-weight: 710 !important;
 }
 
 [data-testid="stCaptionContainer"] {
     color: var(--muted) !important;
-    font-size: 0.66rem !important;
+    font-size: 0.65rem !important;
 }
 
-/* Inputs */
+/* ---------- Text fields ---------- */
 [data-testid="stTextInput"] input {
-    height: 35px !important;
-    min-height: 35px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0.4rem 0.58rem !important;
     border: 1px solid var(--line-strong) !important;
-    border-radius: 5px !important;
+    border-radius: 3px !important;
     background: #fff !important;
     box-shadow: none !important;
     color: var(--ink) !important;
     font-size: 0.77rem !important;
-    padding: 0.34rem 0.55rem !important;
 }
 
 [data-testid="stTextInput"] input:focus {
-    border-color: #969da2 !important;
-    box-shadow: 0 0 0 1px #969da2 !important;
+    border-color: #8fa8b5 !important;
+    box-shadow: 0 0 0 1px #8fa8b5 !important;
 }
 
-/* File uploaders: restrained and light */
+/* ---------- File uploaders ----------
+   Deliberately flat: no card, no grey fill, no 200 MB clutter. */
 [data-testid="stFileUploader"] {
     background: transparent !important;
 }
 
 [data-testid="stFileUploaderDropzone"] {
-    min-height: 68px !important;
-    padding: 0.45rem 0.65rem !important;
+    min-height: 54px !important;
+    padding: 0.48rem 0 !important;
     background: #fff !important;
-    border: 1px solid var(--line) !important;
-    border-radius: 5px !important;
+    border: 0 !important;
+    border-top: 1px solid var(--line) !important;
+    border-bottom: 1px solid var(--line) !important;
+    border-radius: 0 !important;
 }
 
 [data-testid="stFileUploaderDropzone"] section {
     padding: 0 !important;
 }
 
-[data-testid="stFileUploaderDropzone"] p,
-[data-testid="stFileUploaderDropzone"] small {
-    color: #72787d !important;
-    font-size: 0.65rem !important;
-    line-height: 1.2 !important;
+[data-testid="stFileUploaderDropzone"] small,
+[data-testid="stFileUploaderDropzone"] p:not(:first-child) {
+    display: none !important;
 }
 
-/* Download buttons */
+[data-testid="stFileUploaderDropzone"] p {
+    color: #7e8991 !important;
+    font-size: 0.66rem !important;
+}
+
+[data-testid="stFileUploaderDropzone"] button {
+    min-height: 30px !important;
+    height: 30px !important;
+    padding: 0 0.68rem !important;
+    border: 1px solid var(--line-strong) !important;
+    border-radius: 3px !important;
+    background: #fff !important;
+    color: var(--navy) !important;
+    box-shadow: none !important;
+    font-size: 0.67rem !important;
+    font-weight: 720 !important;
+}
+
+/* ---------- Primary action ---------- */
+div[data-testid="stButton"] button[kind="primary"] {
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    padding: 0 0.88rem !important;
+    border: 1px solid var(--navy) !important;
+    border-radius: 3px !important;
+    background: var(--navy) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    font-size: 0.69rem !important;
+    font-weight: 760 !important;
+}
+
+div[data-testid="stButton"] button[kind="primary"]:hover {
+    border-color: #0d2536 !important;
+    background: #0d2536 !important;
+}
+
+/* ---------- Results / downloads ---------- */
+.result-row {
+    padding: 0.28rem 0 0.36rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.result-title {
+    color: var(--ink);
+    font-size: 0.73rem;
+    line-height: 1.25;
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.result-meta {
+    color: var(--muted);
+    font-size: 0.63rem;
+    margin-top: 0.1rem;
+}
+
 .stDownloadButton > button {
     width: auto !important;
     min-width: 0 !important;
@@ -224,20 +281,20 @@ label p {
     height: 29px !important;
     padding: 0 0.58rem !important;
     border: 1px solid var(--line-strong) !important;
-    border-radius: 4px !important;
+    border-radius: 3px !important;
     background: #fff !important;
-    color: #373c40 !important;
-    font-size: 0.66rem !important;
-    font-weight: 700 !important;
+    color: var(--navy) !important;
+    font-size: 0.65rem !important;
+    font-weight: 740 !important;
     box-shadow: none !important;
 }
 
 .stDownloadButton > button:hover {
-    border-color: #aeb4b8 !important;
+    border-color: #97a6af !important;
     background: #fff !important;
 }
 
-/* Remove the previous output card entirely */
+/* No cards around containers. */
 [data-testid="stVerticalBlockBorderWrapper"] {
     border: 0 !important;
     border-radius: 0 !important;
@@ -249,54 +306,31 @@ label p {
     padding: 0 !important;
 }
 
-.output-heading {
-    color: var(--ink);
-    font-size: 0.70rem;
-    font-weight: 760;
-    letter-spacing: 0.01em;
-    text-transform: none;
-    margin: 0 0 0.48rem;
-    padding-bottom: 0.42rem;
-    border-bottom: 1px solid var(--line);
-}
-
-.output-empty {
-    color: #9aa0a4;
-    font-size: 0.72rem;
-    line-height: 1.45;
-    padding: 0.25rem 0 0;
-}
-
-/* File result rows */
-.file-row {
-    padding: 0.35rem 0;
-    border-bottom: 1px solid var(--line);
-}
-
 [data-testid="stAlert"] {
     border: 0 !important;
-    border-left: 2px solid #d6dadd !important;
+    border-left: 2px solid #aab7bf !important;
     border-radius: 0 !important;
-    background: #fafafa !important;
-    font-size: 0.70rem !important;
-    padding: 0.45rem 0.6rem !important;
+    background: #fbfcfc !important;
+    padding: 0.45rem 0.58rem !important;
+    font-size: 0.69rem !important;
 }
 
 [data-testid="stSpinner"] {
-    font-size: 0.70rem !important;
+    font-size: 0.69rem !important;
 }
 
 @media (max-width: 900px) {
+    [data-testid="stMainBlockContainer"],
     .main .block-container {
         width: 100% !important;
-        padding: 0.8rem 0.8rem 1.4rem !important;
+        padding: 12px 16px 24px !important;
     }
 
-    [data-testid="stHorizontalBlock"] {
-        gap: 0.85rem !important;
+    .tool-heading {
+        display: block;
     }
 
-    .api-state {
-        justify-content: flex-start;
+    .tool-heading p {
+        margin-top: 0.25rem !important;
     }
 }
