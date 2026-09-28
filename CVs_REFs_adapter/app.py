@@ -33,36 +33,52 @@ if "resume_results" not in st.session_state:
 
 
 def run_app():
-    input_pane, output_pane = st.columns([1.18, 0.82], gap="large")
+    input_pane, divider, output_pane = st.columns([1.42, 0.025, 0.78], gap="medium")
 
     with input_pane:
-        st.markdown('<div class="pane-label">Tender & files</div>', unsafe_allow_html=True)
+        st.markdown('<div class="pane-label">Input</div>', unsafe_allow_html=True)
 
         ao_title = st.text_input(
             "Tender / AO title",
             placeholder="Paste the tender or AO title",
         )
 
-        ref_col, cv_col = st.columns([0.95, 1.05], gap="medium")
+        ref_col, cv_col = st.columns([1.0, 1.0], gap="large")
         with ref_col:
+            st.markdown('<div class="field-name">Project reference</div>', unsafe_allow_html=True)
             uploaded_ref = st.file_uploader(
                 "Project reference",
                 type=["docx"],
                 key="ref",
+                label_visibility="collapsed",
             )
+            st.markdown(
+                f'<div class="selection-note">{uploaded_ref.name if uploaded_ref else "No file selected"}</div>',
+                unsafe_allow_html=True,
+            )
+
         with cv_col:
+            st.markdown('<div class="field-name">Consultant CVs</div>', unsafe_allow_html=True)
             uploaded_resumes = st.file_uploader(
                 "Consultant CVs",
                 type=["docx"],
                 accept_multiple_files=True,
                 key="adapter_resumes",
+                label_visibility="collapsed",
             )
+            if uploaded_resumes:
+                st.markdown(
+                    f'<div class="selection-note">{len(uploaded_resumes)} file(s) selected</div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.markdown('<div class="selection-note">No files selected</div>', unsafe_allow_html=True)
 
-        run_now = st.button(
-            "Generate adapted files",
-            key="submit_refs_cvs_btn",
-            type="primary",
-        )
+        st.markdown('<div class="action-row-spacer"></div>', unsafe_allow_html=True)
+        run_now = st.button("Generate adapted files", key="submit_refs_cvs_btn", type="primary")
+
+    with divider:
+        st.markdown('<div class="split-rule"></div>', unsafe_allow_html=True)
 
     if not uploaded_ref:
         st.session_state["ref_result"] = None
@@ -155,7 +171,7 @@ def run_app():
                     )
 
     with output_pane:
-        st.markdown('<div class="results-head">Results</div>', unsafe_allow_html=True)
+        st.markdown('<div class="results-head">Output</div>', unsafe_allow_html=True)
 
         downloads = []
         if st.session_state["ref_result"]:
@@ -163,13 +179,10 @@ def run_app():
         downloads.extend(("CV", result) for result in st.session_state["resume_results"])
 
         if not downloads:
-            st.markdown(
-                '<div class="results-empty">Generated Word files will appear here.</div>',
-                unsafe_allow_html=True,
-            )
+            st.markdown('<div class="results-empty">No generated files yet.</div>', unsafe_allow_html=True)
         else:
             for kind, result in downloads:
-                name_col, download_col = st.columns([3.8, 1.0], vertical_alignment="center")
+                name_col, download_col = st.columns([3.4, 1.0], vertical_alignment="center")
                 with name_col:
                     st.markdown(
                         f'<div class="result-row"><div class="result-title">{result["original"]}</div>'

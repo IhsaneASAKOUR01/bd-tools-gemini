@@ -17,20 +17,28 @@ def run_app():
     if "output_path_en" not in st.session_state:
         st.session_state["output_path_en"] = None
 
-    input_pane, output_pane = st.columns([1.18, 0.82], gap="large")
+    input_pane, divider, output_pane = st.columns([1.42, 0.025, 0.78], gap="medium")
 
     with input_pane:
-        st.markdown('<div class="pane-label">Source</div>', unsafe_allow_html=True)
-        uploaded_report = st.file_uploader(
-            "Project report",
-            type=["docx", "pdf", "pptx", "txt"],
-            key="ref_creator_report",
-        )
-        submit = st.button(
-            "Create reference",
-            key="ref_creator_submit",
-            type="primary",
-        )
+        st.markdown('<div class="pane-label">Input</div>', unsafe_allow_html=True)
+        inner, spare = st.columns([1.35, 0.65], gap="large")
+        with inner:
+            st.markdown('<div class="field-name">Project report</div>', unsafe_allow_html=True)
+            uploaded_report = st.file_uploader(
+                "Project report",
+                type=["docx", "pdf", "pptx", "txt"],
+                key="ref_creator_report",
+                label_visibility="collapsed",
+            )
+            st.markdown(
+                f'<div class="selection-note">{uploaded_report.name if uploaded_report else "No file selected"}</div>',
+                unsafe_allow_html=True,
+            )
+            st.markdown('<div class="action-row-spacer"></div>', unsafe_allow_html=True)
+            submit = st.button("Create reference", key="ref_creator_submit", type="primary")
+
+    with divider:
+        st.markdown('<div class="split-rule"></div>', unsafe_allow_html=True)
 
     if uploaded_report and "last_uploaded" in st.session_state:
         if uploaded_report.name != st.session_state["last_uploaded"]:
@@ -95,7 +103,7 @@ def run_app():
         st.session_state["generated"] = True
 
     with output_pane:
-        st.markdown('<div class="results-head">Results</div>', unsafe_allow_html=True)
+        st.markdown('<div class="results-head">Output</div>', unsafe_allow_html=True)
 
         paths = []
         if st.session_state["output_path_fr"]:
@@ -104,13 +112,10 @@ def run_app():
             paths.append(("English reference", st.session_state["output_path_en"]))
 
         if not paths:
-            st.markdown(
-                '<div class="results-empty">French and English Word files will appear here.</div>',
-                unsafe_allow_html=True,
-            )
+            st.markdown('<div class="results-empty">No generated files yet.</div>', unsafe_allow_html=True)
         else:
             for language, path in paths:
-                name_col, dl_col = st.columns([3.8, 1.0], vertical_alignment="center")
+                name_col, dl_col = st.columns([3.4, 1.0], vertical_alignment="center")
                 with name_col:
                     st.markdown(
                         f'<div class="result-row"><div class="result-title">{language}</div>'

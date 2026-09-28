@@ -1,12 +1,12 @@
 :root {
-    --navy: #132f44;
-    --cyan: #0b87a3;
-    --ink: #172027;
-    --text: #404950;
-    --muted: #7b858d;
-    --line: #e5e9ec;
-    --line-strong: #d3d9dd;
-    --paper: #ffffff;
+    --navy: #102f45;
+    --cyan: #1489a4;
+    --ink: #18232b;
+    --text: #4d5961;
+    --muted: #8b949a;
+    --line: #e7eaed;
+    --line-dark: #d5dade;
+    --white: #ffffff;
 }
 
 html, body, [class*="css"] {
@@ -33,59 +33,49 @@ header[data-testid="stHeader"] {
     background: transparent !important;
 }
 
-/* The selector that actually controls current Streamlit page spacing. */
 [data-testid="stMainBlockContainer"],
 .main .block-container {
-    width: min(94vw, 1220px) !important;
-    max-width: 1220px !important;
-    padding-top: 18px !important;
-    padding-bottom: 32px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    width: min(96vw, 1260px) !important;
+    max-width: 1260px !important;
+    padding: 8px 26px 26px !important;
 }
 
-[data-testid="stVerticalBlock"] {
-    gap: 0.52rem !important;
-}
+[data-testid="stVerticalBlock"] { gap: 0.44rem !important; }
+[data-testid="stHorizontalBlock"] { gap: 1.15rem !important; }
 
-[data-testid="stHorizontalBlock"] {
-    gap: 1.55rem !important;
-}
-
-/* ---------- Header ---------- */
+/* Header */
 .product-name {
     color: var(--navy);
-    font-size: 0.76rem;
+    font-size: 0.78rem;
     line-height: 1;
-    font-weight: 760;
+    font-weight: 780;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--line-dark);
     white-space: nowrap;
-    padding-left: 0.15rem;
-    border-left: 1px solid var(--line-strong);
 }
 
 .app-rule {
     height: 1px;
     background: var(--line);
-    margin: 0.48rem 0 1.35rem;
+    margin: 0.35rem 0 0;
 }
 
-/* Navigation behaves like a professional command bar, not a set of cards. */
 .st-key-nav_cvs_refs .stButton > button,
 .st-key-nav_reference .stButton > button,
 .st-key-nav_cv_template .stButton > button {
     width: auto !important;
     min-width: 0 !important;
-    height: 34px !important;
-    min-height: 34px !important;
-    padding: 0 0.1rem 0.28rem !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 0.05rem 0.2rem !important;
     border: 0 !important;
     border-bottom: 2px solid transparent !important;
     border-radius: 0 !important;
     background: transparent !important;
-    color: #68747d !important;
     box-shadow: none !important;
-    font-size: 0.72rem !important;
-    font-weight: 630 !important;
+    color: #68747c !important;
+    font-size: 0.74rem !important;
+    font-weight: 620 !important;
     white-space: nowrap !important;
 }
 
@@ -96,12 +86,14 @@ header[data-testid="stHeader"] {
     background: transparent !important;
 }
 
-/* ---------- Page heading ---------- */
+/* Tool header */
 .tool-heading {
     display: flex;
-    align-items: baseline;
-    gap: 0.85rem;
-    margin: 0 0 1.05rem;
+    align-items: flex-end;
+    min-height: 72px;
+    padding: 13px 0 11px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0.9rem;
 }
 
 .tool-heading h1 {
@@ -109,169 +101,205 @@ header[data-testid="stHeader"] {
     padding: 0 !important;
     color: var(--navy) !important;
     font-family: Inter, "Segoe UI", Arial, sans-serif !important;
-    font-size: 1.45rem !important;
+    font-size: 1.42rem !important;
     line-height: 1.1 !important;
-    font-weight: 760 !important;
+    font-weight: 780 !important;
     letter-spacing: -0.035em !important;
-    white-space: nowrap;
 }
 
 .tool-heading p {
-    margin: 0 !important;
-    color: var(--muted) !important;
-    font-size: 0.72rem !important;
+    margin: 0.28rem 0 0 !important;
+    color: #7c868d !important;
+    font-size: 0.7rem !important;
     line-height: 1.35 !important;
 }
 
-/* ---------- Pane labels ---------- */
+/* Workspace structure */
 .pane-label {
-    color: var(--navy);
-    font-size: 0.66rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    color: #65717a;
+    font-size: 0.62rem;
+    line-height: 1;
+    font-weight: 820;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin: 0 0 0.42rem;
+    margin: 0 0 0.75rem;
+}
+
+.split-rule {
+    width: 1px;
+    min-height: 225px;
+    background: var(--line);
+    margin: 0 auto;
 }
 
 .results-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 22px;
-    padding-bottom: 0.42rem;
-    margin-bottom: 0.4rem;
-    border-bottom: 1px solid var(--line);
-    color: var(--navy);
-    font-size: 0.67rem;
-    font-weight: 800;
-    letter-spacing: 0.075em;
+    color: #65717a;
+    font-size: 0.62rem;
+    line-height: 1;
+    font-weight: 820;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0.25rem;
 }
 
 .results-empty {
-    color: #9aa3aa;
-    font-size: 0.72rem;
-    line-height: 1.5;
-    padding-top: 0.25rem;
+    color: #a0a7ac;
+    font-size: 0.7rem;
+    line-height: 1.45;
+    padding-top: 0.8rem;
 }
 
-/* labels */
+.field-name {
+    color: #34414a;
+    font-size: 0.69rem;
+    line-height: 1.2;
+    font-weight: 730;
+    margin: 0.05rem 0 0.28rem;
+}
+
+.selection-note {
+    min-height: 17px;
+    margin-top: 0.22rem;
+    color: #7e888f;
+    font-size: 0.64rem;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Hide default widget labels where our own compact labels are used. */
 [data-testid="stWidgetLabel"] {
-    margin-bottom: 0.16rem !important;
+    margin-bottom: 0.18rem !important;
 }
 
 [data-testid="stWidgetLabel"] p,
 label p {
-    color: #4d5961 !important;
-    font-size: 0.68rem !important;
-    font-weight: 710 !important;
+    color: #42505a !important;
+    font-size: 0.69rem !important;
+    font-weight: 700 !important;
 }
 
-[data-testid="stCaptionContainer"] {
-    color: var(--muted) !important;
-    font-size: 0.65rem !important;
-}
-
-/* ---------- Text fields ---------- */
+/* Text input */
 [data-testid="stTextInput"] input {
     height: 38px !important;
     min-height: 38px !important;
-    padding: 0.4rem 0.58rem !important;
-    border: 1px solid var(--line-strong) !important;
-    border-radius: 3px !important;
+    padding: 0.42rem 0.55rem !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--line-dark) !important;
+    border-radius: 0 !important;
     background: #fff !important;
     box-shadow: none !important;
     color: var(--ink) !important;
-    font-size: 0.77rem !important;
+    font-size: 0.76rem !important;
 }
 
 [data-testid="stTextInput"] input:focus {
-    border-color: #8fa8b5 !important;
-    box-shadow: 0 0 0 1px #8fa8b5 !important;
+    border-bottom-color: var(--navy) !important;
+    box-shadow: none !important;
 }
 
-/* ---------- File uploaders ----------
-   Deliberately flat: no card, no grey fill, no 200 MB clutter. */
+/* File uploaders: reduce them to a clean browse control. */
 [data-testid="stFileUploader"] {
     background: transparent !important;
 }
 
 [data-testid="stFileUploaderDropzone"] {
-    min-height: 54px !important;
-    padding: 0.48rem 0 !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    margin: 0 !important;
     background: #fff !important;
     border: 0 !important;
-    border-top: 1px solid var(--line) !important;
-    border-bottom: 1px solid var(--line) !important;
+    border-bottom: 1px solid var(--line-dark) !important;
     border-radius: 0 !important;
 }
 
 [data-testid="stFileUploaderDropzone"] section {
     padding: 0 !important;
+    margin: 0 !important;
+    min-height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
-[data-testid="stFileUploaderDropzone"] small,
-[data-testid="stFileUploaderDropzone"] p:not(:first-child) {
+/* Recent Streamlit versions expose this test-id. */
+[data-testid="stFileUploaderDropzoneInstructions"] {
     display: none !important;
 }
 
-[data-testid="stFileUploaderDropzone"] p {
-    color: #7e8991 !important;
-    font-size: 0.66rem !important;
+/* Fallback: hide helper/limit copy inside the empty drop zone. */
+[data-testid="stFileUploaderDropzone"] small,
+[data-testid="stFileUploaderDropzone"] section > div:not(:last-child) {
+    display: none !important;
 }
 
 [data-testid="stFileUploaderDropzone"] button {
     min-height: 30px !important;
     height: 30px !important;
-    padding: 0 0.68rem !important;
-    border: 1px solid var(--line-strong) !important;
-    border-radius: 3px !important;
+    margin: 0 !important;
+    padding: 0 0.7rem !important;
+    border: 1px solid var(--line-dark) !important;
+    border-radius: 4px !important;
     background: #fff !important;
     color: var(--navy) !important;
     box-shadow: none !important;
-    font-size: 0.67rem !important;
-    font-weight: 720 !important;
+    font-size: 0.66rem !important;
+    font-weight: 730 !important;
 }
 
-/* ---------- Primary action ---------- */
+/* Selected uploader files should remain readable but quiet. */
+[data-testid="stFileUploaderFile"] {
+    border: 0 !important;
+    border-bottom: 1px solid var(--line) !important;
+    border-radius: 0 !important;
+    padding: 0.25rem 0 !important;
+    background: transparent !important;
+}
+
+/* Primary action */
 div[data-testid="stButton"] button[kind="primary"] {
     width: auto !important;
     min-width: 0 !important;
     min-height: 34px !important;
     height: 34px !important;
-    padding: 0 0.88rem !important;
+    padding: 0 0.9rem !important;
     border: 1px solid var(--navy) !important;
-    border-radius: 3px !important;
+    border-radius: 4px !important;
     background: var(--navy) !important;
     color: #fff !important;
     box-shadow: none !important;
-    font-size: 0.69rem !important;
-    font-weight: 760 !important;
+    font-size: 0.68rem !important;
+    font-weight: 770 !important;
 }
 
 div[data-testid="stButton"] button[kind="primary"]:hover {
-    border-color: #0d2536 !important;
-    background: #0d2536 !important;
+    background: #0b2739 !important;
+    border-color: #0b2739 !important;
 }
 
-/* ---------- Results / downloads ---------- */
+.action-row-spacer { height: 0.45rem; }
+
+/* Results */
 .result-row {
-    padding: 0.28rem 0 0.36rem;
+    padding: 0.55rem 0 0.6rem;
     border-bottom: 1px solid var(--line);
 }
 
 .result-title {
     color: var(--ink);
-    font-size: 0.73rem;
+    font-size: 0.72rem;
     line-height: 1.25;
-    font-weight: 700;
+    font-weight: 710;
     word-break: break-word;
 }
 
 .result-meta {
     color: var(--muted);
-    font-size: 0.63rem;
-    margin-top: 0.1rem;
+    font-size: 0.61rem;
+    margin-top: 0.12rem;
 }
 
 .stDownloadButton > button {
@@ -280,57 +308,33 @@ div[data-testid="stButton"] button[kind="primary"]:hover {
     min-height: 29px !important;
     height: 29px !important;
     padding: 0 0.58rem !important;
-    border: 1px solid var(--line-strong) !important;
-    border-radius: 3px !important;
+    border: 1px solid var(--line-dark) !important;
+    border-radius: 4px !important;
     background: #fff !important;
     color: var(--navy) !important;
-    font-size: 0.65rem !important;
-    font-weight: 740 !important;
+    font-size: 0.64rem !important;
+    font-weight: 730 !important;
     box-shadow: none !important;
 }
 
-.stDownloadButton > button:hover {
-    border-color: #97a6af !important;
-    background: #fff !important;
-}
-
-/* No cards around containers. */
-[data-testid="stVerticalBlockBorderWrapper"] {
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-}
-
-[data-testid="stVerticalBlockBorderWrapper"] > div {
-    padding: 0 !important;
-}
-
+/* Keep alerts compact and on-brand. */
 [data-testid="stAlert"] {
     border: 0 !important;
     border-left: 2px solid #aab7bf !important;
     border-radius: 0 !important;
-    background: #fbfcfc !important;
-    padding: 0.45rem 0.58rem !important;
-    font-size: 0.69rem !important;
+    background: #fff !important;
+    padding: 0.4rem 0.55rem !important;
+    font-size: 0.67rem !important;
 }
 
-[data-testid="stSpinner"] {
-    font-size: 0.69rem !important;
-}
+[data-testid="stSpinner"] { font-size: 0.68rem !important; }
 
 @media (max-width: 900px) {
     [data-testid="stMainBlockContainer"],
     .main .block-container {
         width: 100% !important;
-        padding: 12px 16px 24px !important;
+        padding: 8px 14px 24px !important;
     }
-
-    .tool-heading {
-        display: block;
-    }
-
-    .tool-heading p {
-        margin-top: 0.25rem !important;
-    }
+    .tool-heading { min-height: 62px; }
+    .split-rule { display: none; }
 }

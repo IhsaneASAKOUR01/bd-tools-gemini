@@ -10,32 +10,47 @@ from .section_mapper import gpt_fill_as_dict
 
 
 def run_app():
-    input_pane, output_pane = st.columns([1.18, 0.82], gap="large")
+    input_pane, divider, output_pane = st.columns([1.42, 0.025, 0.78], gap="medium")
 
     with input_pane:
-        st.markdown('<div class="pane-label">Files</div>', unsafe_allow_html=True)
+        st.markdown('<div class="pane-label">Input</div>', unsafe_allow_html=True)
 
-        cv_col, template_col = st.columns([1.05, 0.95], gap="medium")
+        cv_col, template_col = st.columns([1.0, 1.0], gap="large")
         with cv_col:
+            st.markdown('<div class="field-name">Source CVs</div>', unsafe_allow_html=True)
             uploaded_resumes = st.file_uploader(
                 "Source CVs",
                 type=["docx"],
                 accept_multiple_files=True,
                 key="template_adapter_resumes",
+                label_visibility="collapsed",
             )
+            if uploaded_resumes:
+                st.markdown(
+                    f'<div class="selection-note">{len(uploaded_resumes)} file(s) selected</div>',
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.markdown('<div class="selection-note">No files selected</div>', unsafe_allow_html=True)
 
         with template_col:
+            st.markdown('<div class="field-name">Word template</div>', unsafe_allow_html=True)
             uploaded_template = st.file_uploader(
                 "Word template",
                 type=["docx"],
                 key="template_adapter_template",
+                label_visibility="collapsed",
+            )
+            st.markdown(
+                f'<div class="selection-note">{uploaded_template.name if uploaded_template else "No file selected"}</div>',
+                unsafe_allow_html=True,
             )
 
-        submit = st.button(
-            "Format CVs",
-            key="submit_cv_adapter",
-            type="primary",
-        )
+        st.markdown('<div class="action-row-spacer"></div>', unsafe_allow_html=True)
+        submit = st.button("Format CVs", key="submit_cv_adapter", type="primary")
+
+    with divider:
+        st.markdown('<div class="split-rule"></div>', unsafe_allow_html=True)
 
     if submit and (not uploaded_resumes or not uploaded_template):
         st.warning("Upload at least one CV and one Word template first.")
@@ -75,16 +90,13 @@ def run_app():
                 )
 
     with output_pane:
-        st.markdown('<div class="results-head">Results</div>', unsafe_allow_html=True)
+        st.markdown('<div class="results-head">Output</div>', unsafe_allow_html=True)
 
         if not generated_files:
-            st.markdown(
-                '<div class="results-empty">Formatted CVs will appear here after processing.</div>',
-                unsafe_allow_html=True,
-            )
+            st.markdown('<div class="results-empty">No generated files yet.</div>', unsafe_allow_html=True)
         else:
             for item in generated_files:
-                name_col, dl_col = st.columns([3.8, 1.0], vertical_alignment="center")
+                name_col, dl_col = st.columns([3.4, 1.0], vertical_alignment="center")
                 with name_col:
                     st.markdown(
                         f'<div class="result-row"><div class="result-title">{item["output_name"]}</div>'

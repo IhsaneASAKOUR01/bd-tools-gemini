@@ -33,7 +33,7 @@ TOOLS = {
     "reference": {
         "nav": "Reference Creator",
         "title": "Create a project reference",
-        "subtitle": "Turn a source report into French and English reference sheets.",
+        "subtitle": "Create French and English references from a source report.",
         "runner": run_ref_creator,
     },
     "cv_template": {
@@ -56,32 +56,29 @@ def go_to(route: str) -> None:
 def render_topbar() -> None:
     route = st.session_state.bd_route
 
-    brand, nav1, nav2, nav3, flex = st.columns(
-        [1.65, 1.28, 1.22, 1.0, 2.85],
-        vertical_alignment="center",
-        gap="small",
-    )
+    brand, nav, spacer = st.columns([1.7, 3.6, 2.7], vertical_alignment="center", gap="small")
 
     with brand:
-        logo_col, product_col = st.columns([1.25, 0.7], vertical_alignment="center", gap="small")
+        logo_col, name_col = st.columns([1.55, 0.8], vertical_alignment="center", gap="small")
         with logo_col:
-            st.image(str(ROOT / "logo.png"), width=112)
-        with product_col:
+            st.image(str(ROOT / "logo.png"), width=126)
+        with name_col:
             st.markdown('<div class="product-name">BD Tools</div>', unsafe_allow_html=True)
 
-    for key, col in zip(["cvs_refs", "reference", "cv_template"], [nav1, nav2, nav3]):
-        with col:
-            if st.button(TOOLS[key]["nav"], key=f"nav_{key}", type="secondary"):
-                go_to(key)
+    with nav:
+        nav_cols = st.columns([1.15, 1.0, 0.82], vertical_alignment="center", gap="medium")
+        for key, col in zip(["cvs_refs", "reference", "cv_template"], nav_cols):
+            with col:
+                if st.button(TOOLS[key]["nav"], key=f"nav_{key}", type="secondary"):
+                    go_to(key)
 
-    # Active route gets a precise underline without turning navigation into pills/tabs.
     st.markdown(
         f"""
         <style>
         .st-key-nav_{route} button {{
             color: #132f44 !important;
-            font-weight: 750 !important;
-            border-bottom: 2px solid #0b87a3 !important;
+            font-weight: 760 !important;
+            border-bottom-color: #0b87a3 !important;
         }}
         </style>
         """,
@@ -96,8 +93,10 @@ def render_tool(route: str) -> None:
     st.markdown(
         f"""
         <div class="tool-heading">
-            <h1>{tool['title']}</h1>
-            <p>{tool['subtitle']}</p>
+            <div>
+                <h1>{tool['title']}</h1>
+                <p>{tool['subtitle']}</p>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
