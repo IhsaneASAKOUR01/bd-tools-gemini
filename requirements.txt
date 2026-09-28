@@ -1,9 +1,11 @@
-streamlit
-google-genai
-python-docx
-PyPDF2
-python-pptx
-deep-translator
-langdetect
-streamlit-extras
-streamlit-js-eval
+# Pinned for reproducible Streamlit Community Cloud installs.
+# streamlit-extras and streamlit-js-eval were removed because this project does not import them.
+streamlit==1.64.0
+pandas==2.3.3
+python-dateutil==2.9.0.post0
+google-genai==2.25.0
+python-docx==1.2.0
+PyPDF2==3.0.1
+python-pptx==1.0.2
+deep-translator==1.11.4
+langdetect==1.0.9
